@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leaflet Map</title>
+    
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"/>
+
+    <style>
+        /* Make sure the map takes up some space */
+        #map {
+            height: 400px;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <div id="map" style="height:600px;"></div>
+    
+    <div id="sidebar">
+        <button id="themeBtn">Change Theme</button>
+        <button id="satelliteBtn">Satellite Mode</button>
+    </div>
+
+    <script src="script.js"></script>
+</body>
