@@ -6,24 +6,24 @@
     <title>Leaflet Map</title>
     
     <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="./styles.css"/>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"/>
-
-    <style>
-        /* Make sure the map takes up some space */
-        #map {
-            height: 400px;
-            width: 100%;
-        }
-    </style>
 </head>
+
 <body>
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
-    <div id="map" style="height:600px;"></div>
+    
+    <!-- Container for the two maps -->
+    <div id="map-container">
+        <div id="map1" class="map" style="height: 600px;"></div>
+        <div id="map2" class="map" style="height: 600px;"></div>
+    </div>
     
     <div id="sidebar">
-        <button id="themeBtn">Change Theme</button>
+        <button id="splitBtn">Split Map</button>
         <button id="satelliteBtn">Satellite Mode</button>
     </div>
 
     <script src="script.js"></script>
 </body>
+</html>
