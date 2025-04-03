@@ -47,7 +47,7 @@ document.addEventListener("DOMContentLoaded", function () {
     currentLayerMap1.addTo(map1);
     currentLayerMap2.addTo(map2);
 
-    // Sync panning and zooming with debounce
+    // --- Sync panning and zooming with debounce
     let isSyncing = false;
     let zoomTimeout;
 
@@ -76,29 +76,39 @@ document.addEventListener("DOMContentLoaded", function () {
         syncZoom(map2, map1);
     });
 
+    // Initialize debugging
+    const debug = setupDebugging(map1, map2, regularTheme1, regularTheme2, currentLayerMap1, currentLayerMap2);
+
     // Button to toggle satellite mode for both maps
-    document.getElementById("satelliteBtn").addEventListener("click", function () {
-        // Remove current layers
-        map1.removeLayer(currentLayerMap1);
-        map2.removeLayer(currentLayerMap2);
+    document.getElementById("toggleBtn").addEventListener("click", function () {
+        const isSatellite = (currentLayerMap1 === satellite1);
+        console.log('Current mode:', isSatellite ? 'Satellite' : 'Regular');
         
-        // Toggle between regular and satellite views
-        if (currentLayerMap1 === regularTheme1) {
-            // Switch to satellite view with overlay
-            currentLayerMap1 = satellite1;
-            currentLayerMap2 = satellite2;
-            currentLayerMap1.addTo(map1);
-            currentLayerMap2.addTo(map2);
-            overlayLayer1.addTo(map1);
-            overlayLayer2.addTo(map2);
+        if (!isSatellite) {
+            // Switch TO satellite mode
+            console.log('Switching to satellite mode');
+            const newLayers = switchView(
+                [map1, map2],
+                [currentLayerMap1, currentLayerMap2],
+                [satellite1, satellite2],
+                [overlayLayer1, overlayLayer2]
+            );
+            currentLayerMap1 = newLayers.map1Layer;
+            currentLayerMap2 = newLayers.map2Layer;
         } else {
-            // Switch back to regular view
-            currentLayerMap1 = regularTheme1;
-            currentLayerMap2 = regularTheme2;
-            currentLayerMap1.addTo(map1);
-            currentLayerMap2.addTo(map2);
-            map1.removeLayer(overlayLayer1);
-            map2.removeLayer(overlayLayer2);
+            // Switch TO regular mode
+            console.log('Switching to regular mode');
+            const newLayers = switchView(
+                [map1, map2],
+                [currentLayerMap1, currentLayerMap2],
+                [regularTheme1, regularTheme2],
+                [overlayLayer1, overlayLayer2]
+            );
+            currentLayerMap1 = newLayers.map1Layer;
+            currentLayerMap2 = newLayers.map2Layer;
         }
+
+        // Log the state change
+        debug.logViewState();
     });
 });
