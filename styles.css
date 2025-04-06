@@ -1,20 +1,21 @@
 body {
     margin: 0;
+    background: #27352b;
     display: flex;
 }
 
 #sidebar {
-    width: 200px;
-    background: #2c3e50;
+    width: 150px;
+    background: #3d6f4a;
     color: white;
-    padding: 20px;
+    padding: 10px;
     display: flex;
     flex-direction: column;
     gap: 10px;
 }
 
 button {
-    background: #3498db;
+    background: #81c851;
     color: white;
     border: none;
     padding: 10px;
@@ -23,7 +24,7 @@ button {
 }
 
 button:hover {
-    background: #2980b9;
+    background: #9cd179;
 }
 
 #map {

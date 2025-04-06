@@ -12,16 +12,18 @@
 
 <body>
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
-    
+    <div id="sidebar">
+        <div>
+            <h2 style="text-align: center; margin: 5px 0; font-family: 'Lato', sans-serif;">Functions</h2>
+        </div>
+        <button id="splitBtn">Split Map</button>
+        <button id="toggleBtn">Toggle Mode</button>
+    </div>
+
     <!-- Container for the two maps -->
     <div id="map-container">
         <div id="map1" class="map" style="height: 600px;"></div>
         <div id="map2" class="map" style="height: 600px;"></div>
-    </div>
-    
-    <div id="sidebar">
-        <button id="splitBtn">Split Map</button>
-        <button id="toggleBtn">Toggle Mode</button>
     </div>
 
 <!-- Include helper functions first, then main script -->
