@@ -12,6 +12,10 @@ document.addEventListener("DOMContentLoaded", function () {
     var map1 = L.map('map1',{ zoomControl: false }).setView([51.505, -0.09], 13);
     var map2 = L.map('map2',{ zoomControl: false }).setView([51.505, -0.09], 13);
 
+    // Control 2: This add a scale to the map
+    L.control.scale().addTo(map1);
+    L.control.scale().addTo(map2);
+
     // Create all tile layers using the helper function
     const {
         satellite1,
@@ -29,6 +33,42 @@ document.addEventListener("DOMContentLoaded", function () {
     regularTheme2.addTo(map2);
     overlayLayer1.addTo(map1);
     overlayLayer2.addTo(map2);
+
+    // Initialize geocoders for both maps
+    const geocoder1 = L.Control.Geocoder.nominatim();
+    const geocoder2 = L.Control.Geocoder.nominatim();
+
+    // Add search functionality for map1
+    document.getElementById('search1').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            const query = this.value;
+            geocoder1.geocode(query, function(results) {
+                if (results && results.length > 0) {
+                    const result = results[0];
+                    map1.setView(result.center, 13);
+                    L.marker(result.center).addTo(map1)
+                        .bindPopup(result.name || query)
+                        .openPopup();
+                }
+            });
+        }
+    });
+
+    // Add search functionality for map2
+    document.getElementById('search2').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            const query = this.value;
+            geocoder2.geocode(query, function(results) {
+                if (results && results.length > 0) {
+                    const result = results[0];
+                    map2.setView(result.center, 13);
+                    L.marker(result.center).addTo(map2)
+                        .bindPopup(result.name || query)
+                        .openPopup();
+                }
+            });
+        }
+    });
 
     // Track current view state
     let isSatellite = false;

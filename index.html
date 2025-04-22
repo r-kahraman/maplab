@@ -8,22 +8,48 @@
     <!-- Leaflet CSS -->
     <link rel="stylesheet" href="./styles.css"/>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"/>
+    <!-- Add Leaflet.Geocoder CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
 </head>
 
 <body>
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <!-- Add Leaflet.Geocoder JS -->
+    <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+    
     <div id="sidebar">
+        <div>
+            <h1 style="text-align: center; margin: 5px 0; font-family: 'Lato', sans-serif;">MapLab</h2>
+        </div>
         <div>
             <h2 style="text-align: center; margin: 5px 0; font-family: 'Lato', sans-serif;">Functions</h2>
         </div>
-        <button id="splitBtn">Split Map</button>
-        <button id="toggleBtn">Toggle Mode</button>
+            <button id="splitBtn" class="functionBtn">Split Map</button>
+            <button id="toggleBtn" class="functionBtn">Toggle Mode</button>
+            
+        <div>
+            <h2 style="text-align: center; margin: 5px 0; font-family: 'Lato', sans-serif;">Data</h2>
+        </div>
+            <button id="unfinishedBtn" class="dataBtn">coming soon...</button>
+            
+        <div>
+            <h2 style="text-align: center; margin: 5px 0; font-family: 'Lato', sans-serif;">About</h2>
+        </div>
+            <button id="unfinishedBtn2" class="aboutBtn">coming soon...</button>
     </div>
 
     <!-- Container for the two maps -->
     <div id="map-container">
-        <div id="map1" class="map" style="height: 600px;"></div>
-        <div id="map2" class="map" style="height: 600px;"></div>
+        <div id="map1" class="map" style="height: 600px;">
+            <div class="map-search-container">
+                <input type="text" id="search1" placeholder="Search Map 1..." class="map-search-input">
+            </div>
+        </div>
+        <div id="map2" class="map" style="height: 600px;">
+            <div class="map-search-container">
+                <input type="text" id="search2" placeholder="Search Map 2..." class="map-search-input">
+            </div>
+        </div>
     </div>
 
 <!-- Include helper functions first, then main script -->
