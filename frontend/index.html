@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Leaflet Map</title>
+    <title>Maplab - Alpha Version</title>
     
     <!-- Leaflet CSS -->
     <link rel="stylesheet" href="./styles.css"/>
@@ -19,40 +19,39 @@
     
     <div id="sidebar">
         <div>
-            <h1 style="text-align: center; margin: 5px 0; font-family: 'Lato', sans-serif;">MapLab</h2>
+            <h1 style="text-align: center; margin: 5px 0;">MapLab</h2>
         </div>
         <div>
-            <h2 style="text-align: center; margin: 5px 0; font-family: 'Lato', sans-serif;">Functions</h2>
+            <h2 style="text-align: center; margin: 5px 0;">Functions</h2>
         </div>
             <button id="splitBtn" class="functionBtn">Split Map</button>
             <button id="toggleBtn" class="functionBtn">Toggle Mode</button>
+            <button id="drawBtn" class="functionBtn">Draw!</button>
             
         <div>
-            <h2 style="text-align: center; margin: 5px 0; font-family: 'Lato', sans-serif;">Data</h2>
+            <h2 style="text-align: center; margin: 5px 0;">Data</h2>
         </div>
             <button id="unfinishedBtn" class="dataBtn">coming soon...</button>
             
         <div>
-            <h2 style="text-align: center; margin: 5px 0; font-family: 'Lato', sans-serif;">About</h2>
+            <h2 style="text-align: center; margin: 5px 0;">About</h2>
         </div>
             <button id="unfinishedBtn2" class="aboutBtn">coming soon...</button>
     </div>
 
     <!-- Container for the two maps -->
     <div id="map-container">
-        <div id="map1" class="map" style="height: 600px;">
-            <div class="map-search-container">
+        <div id="map1" class="map" style="height: 700px;">
+            <!-- Manual input box if neccessary -->
+            <!-- <div class="map-search-container">
                 <input type="text" id="search1" placeholder="Search Map 1..." class="map-search-input">
-            </div>
+            </div> -->
         </div>
-        <div id="map2" class="map" style="height: 600px;">
-            <div class="map-search-container">
-                <input type="text" id="search2" placeholder="Search Map 2..." class="map-search-input">
-            </div>
+        <div id="map2" class="map" style="height: 700px;">
         </div>
     </div>
-
-<!-- Include helper functions first, then main script -->
+    
+    <!-- Include helper functions first, then main script -->
     <script src="helpers.js"></script>
     <script src="script.js"></script>
 </body>

@@ -34,41 +34,30 @@ document.addEventListener("DOMContentLoaded", function () {
     overlayLayer1.addTo(map1);
     overlayLayer2.addTo(map2);
 
-    // Initialize geocoders for both maps
-    const geocoder1 = L.Control.Geocoder.nominatim();
-    const geocoder2 = L.Control.Geocoder.nominatim();
+    // Initialize geocoders for both maps and add search functionality
+    const geocoder1 = new L.Control.Geocoder({
+        geocoder: L.Control.Geocoder.nominatim(),
+        position: 'topleft',
+        showResultIcons: true,
+        collapsed: false,
+        defaultMarkGeocode: false
+    }).addTo(map1);
+    
+    geocoder1.addEventListener('markgeocode', function(e){
+        map1.setView(e.geocode.center, map1.getZoom());
+    })
 
-    // Add search functionality for map1
-    document.getElementById('search1').addEventListener('keypress', function(e) {
-        if (e.key === 'Enter') {
-            const query = this.value;
-            geocoder1.geocode(query, function(results) {
-                if (results && results.length > 0) {
-                    const result = results[0];
-                    map1.setView(result.center, 13);
-                    L.marker(result.center).addTo(map1)
-                        .bindPopup(result.name || query)
-                        .openPopup();
-                }
-            });
-        }
-    });
+    const geocoder2 = new L.Control.Geocoder({
+        geocoder: L.Control.Geocoder.nominatim(),
+        position: 'topleft',
+        showResultIcons: false,
+        collapsed: false,
+        defaultMarkGeocode: false
+    }).addTo(map2);
 
-    // Add search functionality for map2
-    document.getElementById('search2').addEventListener('keypress', function(e) {
-        if (e.key === 'Enter') {
-            const query = this.value;
-            geocoder2.geocode(query, function(results) {
-                if (results && results.length > 0) {
-                    const result = results[0];
-                    map2.setView(result.center, 13);
-                    L.marker(result.center).addTo(map2)
-                        .bindPopup(result.name || query)
-                        .openPopup();
-                }
-            });
-        }
-    });
+    geocoder2.addEventListener('markgeocode', function(e){
+        map2.setView(e.geocode.center, map2.getZoom());
+    })
 
     // Track current view state
     let isSatellite = false;
