@@ -1,13 +1,13 @@
 body {
     margin: 0;
-    background: #314535;
+    background: #f5f2eb;
     display: flex;
 }
 
 h1 {
     font-size: 24px;
     font-family: 'Lato Light', 'Lato', sans-serif;
-    color: #dddddd;
+    color: #fcffeb;
     font-weight: bold;
     margin-top: 20px;
     margin-bottom: 10px;
@@ -17,7 +17,7 @@ h1 {
 h2 {
     font-size: 20px;
     font-family: 'Lato Thin', 'Lato', sans-serif;
-    color: #dddddd;
+    color: #fcffeb;
     font-weight: bold;
     margin-top: 20px;
     margin-bottom: 10px;
@@ -34,7 +34,7 @@ h2 {
 }
 
 button {
-    background: #81c851;
+    background: #adc263;
     color: white;
     border: none;
     padding: 8px;
@@ -105,3 +105,7 @@ button:hover {
     line-height: 24px !important;
     box-sizing: border-box !important;
 } */
+
+.leaflet-container.drawing-enabled {
+    cursor: crosshair;
+}

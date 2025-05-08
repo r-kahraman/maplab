@@ -1,3 +1,14 @@
+var appSettings = {
+    buttons: {
+        onColor: '#953813',
+        offColor: '#adc263'
+    },
+
+    sideBar: {
+        test: '#953813'
+    }
+}
+
 // Function to create tile layers
 function createTileLayers() {
     // Tile layers
@@ -43,6 +54,27 @@ function createTileLayers() {
         overlayLayer1,
         overlayLayer2
     };
+}
+
+function copyLayerShapes(layers) {
+    let layerCopies = [];
+    let layerCopy;
+    layers.forEach(layer => {
+        // Create a copy of the layer based on its type
+        if (layer instanceof L.Polygon) {
+            layerCopy = L.polygon(layer.getLatLngs(), {
+                ...layer.options,
+                scaleWithZoom: true
+            });
+        } else if (layer instanceof L.Polyline) {
+            layerCopy = L.polyline(layer.getLatLngs(), {
+                ...layer.options,
+                scaleWithZoom: true
+            });
+        }
+        layerCopies.push(layerCopy); // Changed .add() to .push()
+    });
+    return layerCopies;
 }
 
 // Function to setup debugging
