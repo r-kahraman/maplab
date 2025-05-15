@@ -146,3 +146,30 @@ function switchView(isSatellite, listMaps, listCurrentLayers,
     }
     return !isSatellite;  // Return the new state (opposite of current state)
 } 
+
+function enableCursorCircle(map, cursorCircle) {
+    if (!cursorCircle) {
+        console.log("Start value of cursorCircle: ", cursorCircle)
+        cursorCircle = document.createElement("div");
+        cursorCircle.id = "cursor-circle";
+        //maps.forEach(map => {
+        //    map.getContainer().appendChild(cursorCircle);
+        //}); 
+
+        map.getContainer().appendChild(cursorCircle);
+    }
+
+    cursorCircle.style.display = "block";
+
+    map.getContainer().addEventListener("mousemove", (e) => {
+        cursorCircle.style.left = `${e.clientX}px`;
+        cursorCircle.style.top = `${e.clientY}px`;
+    });
+
+function disableCursorCircle() {
+    if (cursorCircle) cursorCircle.style.display = "none";
+}
+
+
+
+}

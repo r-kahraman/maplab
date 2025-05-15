@@ -23,6 +23,19 @@ h2 {
     margin-bottom: 10px;
   }
 
+  #cursor-circle {
+    position: absolute;
+    pointer-events: none;
+    border: 2px solid #cd2500;
+    border-radius: 50%;
+    width: 300px;  /* 2 * 200px radius */
+    height: 300px;
+    margin-left: -300px;
+    margin-top: -150px;
+    z-index: 1000;
+    display: none;
+}
+
 #sidebar {
     width: 130px;
     background: #447250;
@@ -66,7 +79,7 @@ button:hover {
 .map {
     flex: 1; /* This will make each map take equal space */
     margin: 8px; /* Optional: Add some spacing between the maps */
-    position: relative; /* Add this for absolute positioning of search */
+    position: relative; /* Add this for absolute positioning of search, also ensure absolute child positioning */
 }
 
 /* .map-search-input {

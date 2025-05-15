@@ -216,6 +216,14 @@ document.addEventListener("DOMContentLoaded", function () {
         drawnItems2.clearLayers();
         console.log('All drawings deleted from both maps');
     }
-
     document.getElementById('deleteDrawingsBtn').addEventListener('click', deleteDrawings);
+
+    let cursorCircle;
+    function getPOIs() {
+        console.log("POI mode enabled");
+        enableCursorCircle(map1, cursorCircle)
+    }
+    document.getElementById('getPoisButton').addEventListener('click', getPOIs);
+
+    
 });

@@ -1,6 +1,6 @@
 from flask import request, jsonify
 from config import db, app
-#from models import Model
+from models import Model
 
 @app.route("/route1", methods=["GET"])
 def route1():
