@@ -23,14 +23,16 @@ document.addEventListener("DOMContentLoaded", function () {
         satellite2,
         regularTheme1,
         regularTheme2,
+        matrixTheme1,
+        matrixTheme2,
         overlayLayer1,
         overlayLayer2
     } = createTileLayers();
     // Add all layers to both maps initially
     satellite1.addTo(map1);
     satellite2.addTo(map2);
-    regularTheme1.addTo(map1);
-    regularTheme2.addTo(map2);
+    matrixTheme1.addTo(map1);
+    matrixTheme2.addTo(map2);
     overlayLayer1.addTo(map1);
     overlayLayer2.addTo(map2);
 
@@ -222,7 +224,37 @@ document.addEventListener("DOMContentLoaded", function () {
     function getPOIs() {
         console.log("POI mode enabled");
         enableCursorCircle(map1, cursorCircle)
+
+        function handleClick(e) {
+            const { lat, lng } = e.latlng;
+            const radius = 100;
+            console.log('Fetching POIs at:', lat, lng, 'Radius:', radius);
+    
+            fetch("/get_pois", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    lat: lat,
+                    lon: lng,
+                    radius: radius
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log("POI data received:", data);
+                // You can add code here to display POIs on the map
+                map1.off('click', handleClick); // ✅ remove listener after one use
+            })
+            .catch(error => {
+                console.error("Error fetching POIs:", error);
+            });
+        }
+
+        map1.on('click', handleClick); // ✅ Leaflet click listener
     }
+
     document.getElementById('getPoisButton').addEventListener('click', getPOIs);
 
     

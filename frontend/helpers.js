@@ -30,20 +30,49 @@ function createTileLayers() {
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; CARTO',
         opacity: 1  // Start visible
     });
-
+    
     // Create overlay layer for geographic information
     var overlayLayer1 = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_only_labels/{z}/{x}/{y}.png', {
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; CARTO',
-        opacity: 1,
+        opacity: 0,
         pane: 'overlayPane',
         subdomains: 'abcd'
     });
     
     var overlayLayer2 = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_only_labels/{z}/{x}/{y}.png', {
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; CARTO',
-        opacity: 1,
+        opacity: 0,
         pane: 'overlayPane',
         subdomains: 'abcd'
+    });
+    
+    var matrixTheme1 = L.tileLayer('https://tile.jawg.io/jawg-matrix/{z}/{x}/{y}{r}.png?access-token={accessToken}', {
+        attribution: '<a href="https://jawg.io" title="Tiles Courtesy of Jawg Maps" target="_blank">&copy; <b>Jawg</b>Maps</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+        opacity: 1,  // Start visible
+        minZoom: 0,
+        maxZoom: 22,
+        accessToken: 'xJYhWynlw5VQKxK0KqzKoBnuAnsNBB9PxrC33Fl0kBOPYwqg5kcNlP50fkY0kU9A'
+    });
+    var matrixTheme2 = L.tileLayer('https://tile.jawg.io/jawg-matrix/{z}/{x}/{y}{r}.png?access-token={accessToken}', {
+        attribution: '<a href="https://jawg.io" title="Tiles Courtesy of Jawg Maps" target="_blank">&copy; <b>Jawg</b>Maps</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+        opacity: 1,  // Start visible
+        minZoom: 0,
+        maxZoom: 22,
+        accessToken: 'xJYhWynlw5VQKxK0KqzKoBnuAnsNBB9PxrC33Fl0kBOPYwqg5kcNlP50fkY0kU9A'
+    });
+
+    var Stadia_StamenToner = L.tileLayer('https://tiles.stadiamaps.com/tiles/stamen_toner/{z}/{x}/{y}{r}.{ext}', {
+        minZoom: 0,
+        maxZoom: 20,
+        attribution: '&copy; <a href="https://www.stadiamaps.com/" target="_blank">Stadia Maps</a> &copy; <a href="https://www.stamen.com/" target="_blank">Stamen Design</a> &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+        ext: 'png'
+    });
+
+    var Stadia_StamenWatercolor = L.tileLayer('https://tiles.stadiamaps.com/tiles/stamen_watercolor/{z}/{x}/{y}.{ext}', {
+        minZoom: 1,
+        maxZoom: 16,
+        attribution: '&copy; <a href="https://www.stadiamaps.com/" target="_blank">Stadia Maps</a> &copy; <a href="https://www.stamen.com/" target="_blank">Stamen Design</a> &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+        ext: 'jpg'
     });
 
     return {
@@ -51,6 +80,10 @@ function createTileLayers() {
         satellite2,
         regularTheme1,
         regularTheme2,
+        matrixTheme1,
+        matrixTheme2,
+        //Stadia_StamenToner,
+        //Stadia_StamenWatercolor,
         overlayLayer1,
         overlayLayer2
     };
@@ -166,7 +199,7 @@ function enableCursorCircle(map, cursorCircle) {
         cursorCircle.style.top = `${e.clientY}px`;
     });
 
-function disableCursorCircle() {
+function disableCursorCircle(cursorCircle) {
     if (cursorCircle) cursorCircle.style.display = "none";
 }
 

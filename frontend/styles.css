@@ -37,7 +37,7 @@ h2 {
 }
 
 #sidebar {
-    width: 130px;
+    width: 110px;
     background: #447250;
     color: white;
     padding: 10px;
@@ -50,14 +50,14 @@ button {
     background: #adc263;
     color: white;
     border: none;
-    padding: 8px;
+    padding: 4px;
     cursor: pointer;
     border-radius: 8px;
     display: flex;
     align-self: left;
     justify-content: center;
-    width: 55px;
-    height: 55px;
+    width: 52px;
+    height: 52px;
 }
 
 button:hover {
