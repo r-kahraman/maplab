@@ -19,20 +19,18 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Create all tile layers using the helper function
     const {
-        satellite1,
-        satellite2,
-        regularTheme1,
-        regularTheme2,
-        matrixTheme1,
-        matrixTheme2,
-        overlayLayer1,
-        overlayLayer2
+        satellite1: satellite1,
+        satellite2: satellite2,
+        matrixTheme1: regularTheme1,
+        matrixTheme2: regularTheme2,
+        overlayLayer1: overlayLayer1,
+        overlayLayer2: overlayLayer2
     } = createTileLayers();
     // Add all layers to both maps initially
     satellite1.addTo(map1);
     satellite2.addTo(map2);
-    matrixTheme1.addTo(map1);
-    matrixTheme2.addTo(map2);
+    regularTheme1.addTo(map1);
+    regularTheme2.addTo(map2);
     overlayLayer1.addTo(map1);
     overlayLayer2.addTo(map2);
 
@@ -221,6 +219,7 @@ document.addEventListener("DOMContentLoaded", function () {
     document.getElementById('deleteDrawingsBtn').addEventListener('click', deleteDrawings);
 
     let cursorCircle;
+    
     function getPOIs() {
         console.log("POI mode enabled");
         enableCursorCircle(map1, cursorCircle)
@@ -233,7 +232,8 @@ document.addEventListener("DOMContentLoaded", function () {
             fetch("/get_pois", {
                 method: "POST",
                 headers: {
-                    "Content-Type": "application/json"
+                    "Content-Type": "application/json",
+                    "Accept": "application/json"
                 },
                 body: JSON.stringify({
                     lat: lat,
@@ -241,14 +241,23 @@ document.addEventListener("DOMContentLoaded", function () {
                     radius: radius
                 })
             })
-            .then(response => response.json())
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json();
+            })
             .then(data => {
+                if (data.error) {
+                    throw new Error(data.error);
+                }
                 console.log("POI data received:", data);
                 // You can add code here to display POIs on the map
                 map1.off('click', handleClick); // ✅ remove listener after one use
             })
             .catch(error => {
                 console.error("Error fetching POIs:", error);
+                alert("Error fetching POIs: " + error.message);
             });
         }
 

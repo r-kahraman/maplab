@@ -38,7 +38,7 @@ h2 {
 
 #sidebar {
     width: 110px;
-    background: #447250;
+    background: #002a13;
     color: white;
     padding: 10px;
     display: flex;
@@ -47,7 +47,7 @@ h2 {
 }
 
 button {
-    background: #adc263;
+    background: #238a37;
     color: white;
     border: none;
     padding: 4px;

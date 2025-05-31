@@ -78,14 +78,12 @@ function createTileLayers() {
     return {
         satellite1,
         satellite2,
-        regularTheme1,
-        regularTheme2,
         matrixTheme1,
         matrixTheme2,
-        //Stadia_StamenToner,
-        //Stadia_StamenWatercolor,
         overlayLayer1,
-        overlayLayer2
+        overlayLayer2,
+        Stadia_StamenToner,
+        Stadia_StamenWatercolor
     };
 }
 
