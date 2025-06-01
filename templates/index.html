@@ -6,7 +6,7 @@
     <title>Maplab - Alpha Version</title>
     
     <!-- Leaflet CSS -->
-    <link rel="stylesheet" href="./styles.css"/>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"/>
     
     <!-- Leaflet.draw CSS -->
@@ -62,7 +62,7 @@
     </div>
     
     <!-- Include helper functions first, then main script -->
-    <script src="helpers.js"></script>
-    <script src="script.js"></script>
+    <script src="{{ url_for('static', filename='helpers.js') }}"></script>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>
 </html>
