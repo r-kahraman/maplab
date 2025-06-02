@@ -218,53 +218,102 @@ document.addEventListener("DOMContentLoaded", function () {
     }
     document.getElementById('deleteDrawingsBtn').addEventListener('click', deleteDrawings);
 
-    let cursorCircle;
-    
-    function getPOIs() {
-        console.log("POI mode enabled");
-        enableCursorCircle(map1, cursorCircle)
-
-        function handleClick(e) {
-            const { lat, lng } = e.latlng;
-            const radius = 100;
-            console.log('Fetching POIs at:', lat, lng, 'Radius:', radius);
-    
-            fetch("/get_pois", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Accept": "application/json"
-                },
-                body: JSON.stringify({
-                    lat: lat,
-                    lon: lng,
-                    radius: radius
-                })
-            })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                return response.json();
-            })
-            .then(data => {
-                if (data.error) {
-                    throw new Error(data.error);
-                }
-                console.log("POI data received:", data);
-                // You can add code here to display POIs on the map
-                map1.off('click', handleClick); // ✅ remove listener after one use
-            })
-            .catch(error => {
-                console.error("Error fetching POIs:", error);
-                alert("Error fetching POIs: " + error.message);
-            });
-        }
-
-        map1.on('click', handleClick); // ✅ Leaflet click listener
-    }
+    let cursorCircle = null;
 
     document.getElementById('getPoisButton').addEventListener('click', getPOIs);
 
+    let isGetPOIsActive = false;
+
+    function turnOffGetPOIs(){
+        console.log("Turning off click")
+        map1.off('click');
+        getPoisButton.innerText = "Get POIs";
+        getPoisButton.style.backgroundColor = appSettings.buttons.offColor;
+        
+        // Re-enable map interaction
+        map1.dragging.enable();
+        map1.scrollWheelZoom.enable();
+        map1.doubleClickZoom.enable();
+        
+        if (cursorCircle){
+            disableCursorCircle(cursorCircle);
+            cursorCircle = null;
+        }
+    }
+
+    const spinner = document.getElementById("spinner");
+    function showSpinner() {
+        spinner.classList.remove("hidden");
+    }  
+    function hideSpinner() {
+        spinner.classList.add("hidden");
+    }
+
+    function getPOIs() {
+        isGetPOIsActive = !isGetPOIsActive;
+        const getPoisButton = document.getElementById('getPoisButton');
+
+        if (isGetPOIsActive) {
+            console.log("POI mode enabled");
+            getPoisButton.innerText = "Stop Getting POIs";
+            getPoisButton.style.backgroundColor = appSettings.buttons.onColor;
+            
+            // Disable map interaction
+            map1.dragging.disable();
+            map1.scrollWheelZoom.disable();
+            map1.doubleClickZoom.disable();
+            
+            cursorCircle = enableCursorCircle(map1, cursorCircle);
+            console.log(cursorCircle)
+
+            function handleClick(e) {
+                const { lat, lng } = e.latlng;
+                const radius = 100;
+                console.log('Fetching POIs at:', lat, lng, 'Radius:', radius);
+                showSpinner();
+
+                fetch("/get_pois", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Accept": "application/json"
+                    },
+                    body: JSON.stringify({
+                        lat: lat,
+                        lon: lng,
+                        radius: radius
+                    })
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response.json();
+                    
+                })
+                .then(data => {
+                    if (data.error) {
+                        throw new Error(data.error);
+                    }
+                    console.log("POI data received:", data);
+                    // You can add code here to display POIs on the map
+                turnOffGetPOIs()
+                hideSpinner();
+                })
+                .catch(error => {
+                    console.error("Error fetching POIs:", error);
+                    alert("Error fetching POIs: " + error.message);
+                    map1.off('click');
+                });
+            }
+
+            map1.on('click', handleClick);
+
+        } 
+        
+        else {
+            turnOffGetPOIs()
+        }
+    }
     
 });

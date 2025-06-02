@@ -28,10 +28,10 @@ h2 {
     pointer-events: none;
     border: 2px solid #cd2500;
     border-radius: 50%;
-    width: 300px;  /* 2 * 200px radius */
-    height: 300px;
-    margin-left: -300px;
-    margin-top: -150px;
+    width: 200px;  /* 2 * 200px radius */
+    height: 200px;
+    margin-left: -200px;
+    margin-top: -100px;
     z-index: 1000;
     display: none;
 }
@@ -121,4 +121,26 @@ button:hover {
 
 .leaflet-container.drawing-enabled {
     cursor: crosshair;
+}
+
+.spinner {
+    position: fixed;
+    top: 80%;
+    left: 52%;
+    width: 40px;
+    height: 40px;
+    border: 4px solid #ccc;
+    border-top: 4px solid #238a37;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    z-index: 2000;
+    transform: translate(-50%, -50%);
+}
+
+@keyframes spin {
+    to { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+.hidden {
+    display: none;
 }

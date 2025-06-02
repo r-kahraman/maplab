@@ -1,7 +1,7 @@
 var appSettings = {
     buttons: {
         onColor: '#953813',
-        offColor: '#adc263'
+        offColor: '#238a37'
     },
 
     sideBar: {
@@ -186,7 +186,6 @@ function enableCursorCircle(map, cursorCircle) {
         //maps.forEach(map => {
         //    map.getContainer().appendChild(cursorCircle);
         //}); 
-
         map.getContainer().appendChild(cursorCircle);
     }
 
@@ -196,11 +195,15 @@ function enableCursorCircle(map, cursorCircle) {
         cursorCircle.style.left = `${e.clientX}px`;
         cursorCircle.style.top = `${e.clientY}px`;
     });
-
-function disableCursorCircle(cursorCircle) {
-    if (cursorCircle) cursorCircle.style.display = "none";
+    
+    return cursorCircle;
 }
 
-
-
+function disableCursorCircle(cursorCircle) {
+    console.log('test before removing cursor circle')
+    if (cursorCircle && cursorCircle.parentNode) {
+        console.log('disabling cursor circle')
+        cursorCircle.parentNode.removeChild(cursorCircle);
+        cursorCircle.style.display = "none";
+    }
 }
