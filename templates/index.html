@@ -33,7 +33,7 @@
         </div>
 
         <button id="splitBtn" class="functionBtn">Split Map</button>
-        <button id="toggleBtn" class="functionBtn">Toggle Mode</button>
+        <!-- <button id="toggleBtn" class="functionBtn">Toggle Mode</button> -->
         <button id="drawBtn" class="functionBtn">Draw!</button>
         <button id="mirrorDrawBtn" class="functionBtn">Mirror Drawing</button>
         <button id="deleteDrawingsBtn" class="functionBtn">Delete Drawings</button>
@@ -41,7 +41,8 @@
         <div>
             <h2 style="text-align: center; margin: 5px 0;">Data</h2>
         </div>
-            <button id="getPoisButton" class="dataBtn">Get POIs</button>
+            <button id="getPoisButton" class="dataBtn">Get POIs (soon...)</button>
+            <button id="highlightBuildingButton" class="dataBtn">Highlight Building</button>
             
         <div>
             <h2 style="text-align: center; margin: 5px 0;">About</h2>
@@ -62,6 +63,16 @@
     </div>
 
     <div id="spinner" class="spinner hidden"></div>
+    
+    <!-- Context Menu -->
+    <div id="contextMenu" class="context-menu hidden">
+        <div class="context-menu-item" data-layer="regular">Regular</div>
+        <div class="context-menu-item" data-layer="satellite">Satellite</div>
+        <div class="context-menu-item" data-layer="dark">Dark</div>
+        <div class="context-menu-item" data-layer="bw">Black & White</div>
+        <div class="context-menu-item" data-layer="topography">Topography</div>
+        <div class="context-menu-item" data-layer="watercolor">Watercolor</div>
+    </div>
     
     <!-- Include helper functions first, then main script -->
     <script src="{{ url_for('static', filename='helpers.js') }}"></script>

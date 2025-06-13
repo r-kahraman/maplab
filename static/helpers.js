@@ -75,6 +75,38 @@ function createTileLayers() {
         ext: 'jpg'
     });
 
+    var OSM_Mapnik1 = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    });
+
+    var OSM_Mapnik2 = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    });
+
+    var Hillshade1 = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Elevation/World_Hillshade/MapServer/tile/{z}/{y}/{x}', {
+        attribution: 'Tiles &copy; Esri — Source: USGS, Esri, TANA, DeLorme',
+        maxZoom: 16
+      })
+
+    var Hillshade2 = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Elevation/World_Hillshade/MapServer/tile/{z}/{y}/{x}', {
+    attribution: 'Tiles &copy; Esri — Source: USGS, Esri, TANA, DeLorme',
+    maxZoom: 16
+    })
+
+    var bnw_cartoDB1 = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+        subdomains: 'abcd',
+        maxZoom: 20
+    });
+    
+    var bnw_cartoDB2 = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+        subdomains: 'abcd',
+        maxZoom: 20
+    })
+
     return {
         satellite1,
         satellite2,
@@ -83,7 +115,13 @@ function createTileLayers() {
         overlayLayer1,
         overlayLayer2,
         Stadia_StamenToner,
-        Stadia_StamenWatercolor
+        Stadia_StamenWatercolor,
+        OSM_Mapnik1,
+        OSM_Mapnik2,
+        Hillshade1,
+        Hillshade2,
+        bnw_cartoDB1,
+        bnw_cartoDB2
     };
 }
 

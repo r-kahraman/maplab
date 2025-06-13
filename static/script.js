@@ -21,10 +21,18 @@ document.addEventListener("DOMContentLoaded", function () {
     const {
         satellite1: satellite1,
         satellite2: satellite2,
-        matrixTheme1: regularTheme1,
-        matrixTheme2: regularTheme2,
+        matrixTheme1: matrixTheme1,
+        matrixTheme2: matrixTheme2,
         overlayLayer1: overlayLayer1,
-        overlayLayer2: overlayLayer2
+        overlayLayer2: overlayLayer2,
+        Stadia_StamenToner: Stadia_StamenToner,
+        Stadia_StamenWatercolor: Stadia_StamenWatercolor,
+        OSM_Mapnik1: regularTheme1,
+        OSM_Mapnik2: regularTheme2,
+        Hillshade1: Hillshade1,
+        Hillshade2: Hillshade2,
+        bnw_cartoDB1: bnw_cartoDB1,
+        bnw_cartoDB2: bnw_cartoDB2
     } = createTileLayers();
     // Add all layers to both maps initially
     satellite1.addTo(map1);
@@ -33,7 +41,21 @@ document.addEventListener("DOMContentLoaded", function () {
     regularTheme2.addTo(map2);
     overlayLayer1.addTo(map1);
     overlayLayer2.addTo(map2);
+    Stadia_StamenToner.addTo(map1);
+    Stadia_StamenWatercolor.addTo(map2);
+    matrixTheme1.addTo(map1);
+    matrixTheme2.addTo(map2);
+    Hillshade1.addTo(map1);
+    Hillshade2.addTo(map2);
+    bnw_cartoDB1.addTo(map1);
+    bnw_cartoDB2.addTo(map2);
+    overlayLayer1.addTo(map1);
+    overlayLayer2.addTo(map2);
 
+    //Set active layers
+    const activeBaseLayerMap1 = regularTheme1;  
+    const activeBaseLayerMap2 = regularTheme2;
+    
     // Initialize geocoders for both maps and add search functionality
     const geocoder1 = new L.Control.Geocoder({
         geocoder: L.Control.Geocoder.nominatim(),
@@ -88,30 +110,128 @@ document.addEventListener("DOMContentLoaded", function () {
         syncZoom(map2, map1);
     });
 
+    map1.on('contextmenu', function (e) {
+        showContextMenu(e, 'map1');
+    });
+    
+    map2.on('contextmenu', function (e) {
+        showContextMenu(e, 'map2');
+    });
+
+    // Context Menu Functions
+    function showContextMenu(e, mapId) {
+        e.originalEvent.preventDefault();
+        const contextMenu = document.getElementById('contextMenu');
+        
+        // Position the context menu at the click coordinates
+        contextMenu.style.left = e.originalEvent.clientX + 'px';
+        contextMenu.style.top = e.originalEvent.clientY + 'px';
+        
+        // Show the context menu
+        contextMenu.classList.remove('hidden');
+        
+        // Add click event listeners to menu items
+        const menuItems = contextMenu.querySelectorAll('.context-menu-item');
+        menuItems.forEach(item => {
+            item.onclick = function() {
+                handleLayerSelection(this.dataset.layer, mapId);
+                contextMenu.classList.add('hidden');
+            };
+        });
+        
+        // Hide context menu when clicking outside
+        document.addEventListener('click', function hideMenu() {
+            contextMenu.classList.add('hidden');
+            document.removeEventListener('click', hideMenu);
+        });
+    }
+    
+    function handleLayerSelection(layerType, mapId) {
+        // This function will be implemented to handle layer visibility
+        console.log(`Selected layer: ${layerType} for map: ${mapId}`);
+
+        if (mapId === 'map1') {
+            map1.eachLayer(function(layer) {
+                if (layer instanceof L.TileLayer) {
+                    layer.setOpacity(0);
+                }
+            });
+            
+            if (layerType === 'regular') {
+                //activeBaseLayerMap1 = regularTheme1;
+                regularTheme1.setOpacity(1);
+            }
+            else if (layerType === 'satellite') {
+                satellite1.setOpacity(1);
+                overlayLayer1.setOpacity(1);
+            }
+            else if (layerType === 'dark') {
+                matrixTheme1.setOpacity(1);
+            }
+            else if (layerType === 'bw') {
+                bnw_cartoDB1.setOpacity(1);
+            }
+            else if (layerType === 'topography') {
+                Hillshade1.setOpacity(1);
+            }
+            else if (layerType === 'watercolor') {
+                Stadia_StamenToner.setOpacity(1);
+            }
+        }
+
+        else if (mapId === 'map2') {
+            map2.eachLayer(function(layer) {
+                if (layer instanceof L.TileLayer) {
+                    layer.setOpacity(0);
+                }
+            });
+            if (layerType === 'regular') {
+                //activeBaseLayerMap1 = regularTheme1;
+                regularTheme2.setOpacity(1);
+            }
+            else if (layerType === 'satellite') {
+                satellite2.setOpacity(1);
+                overlayLayer2.setOpacity(1);
+            }
+            else if (layerType === 'dark') {
+                matrixTheme2.setOpacity(1);
+            }
+            else if (layerType === 'bw') {
+                bnw_cartoDB2.setOpacity(1);
+            }
+            else if (layerType === 'topography') {
+                Hillshade2.setOpacity(1);
+            }
+            else if (layerType === 'watercolor') {
+                Stadia_StamenWatercolor.setOpacity(1);
+            }
+        }   
+    }
+
     // Initialize debugging
     // const debug = setupDebugging(map1, map2, regularTheme1, regularTheme2, satellite1, satellite2);
 
-    // Button to toggle satellite mode for both maps
-    document.getElementById("toggleBtn").addEventListener("click", function () {
-        isSatellite = !isSatellite;
-        console.log('Switching to:', isSatellite ? 'Satellite' : 'Regular');
+    // // Button to toggle satellite mode for both maps
+    // document.getElementById("toggleBtn").addEventListener("click", function () {
+    //     isSatellite = !isSatellite;
+    //     console.log('Switching to:', isSatellite ? 'Satellite' : 'Regular');
 
-        // Toggle opacities
-        if (isSatellite) {
-            satellite1.setOpacity(1);
-            satellite2.setOpacity(1);
-            regularTheme1.setOpacity(0);
-            regularTheme2.setOpacity(0);
-        } else {
-            satellite1.setOpacity(0);
-            satellite2.setOpacity(0);
-            regularTheme1.setOpacity(1);
-            regularTheme2.setOpacity(1);
-        }
+    //     // Toggle opacities
+    //     if (isSatellite) {
+    //         satellite1.setOpacity(1);
+    //         satellite2.setOpacity(1);
+    //         regularTheme1.setOpacity(0);
+    //         regularTheme2.setOpacity(0);
+    //     } else {
+    //         satellite1.setOpacity(0);
+    //         satellite2.setOpacity(0);
+    //         regularTheme1.setOpacity(1);
+    //         regularTheme2.setOpacity(1);
+    //     }
 
-        // Log the state change
-        //debug.logViewState();
-    });
+    //     // Log the state change
+    //     //debug.logViewState();
+    // });
 
     // Draw function
     let drawControl1, drawControl2;
