@@ -245,3 +245,10 @@ function disableCursorCircle(cursorCircle) {
         cursorCircle.style.display = "none";
     }
 }
+
+function resetPOIMarkers(poiMarkers) {
+    poiMarkers.forEach(marker => {
+        marker.remove();
+    });
+    poiMarkers = [];
+}

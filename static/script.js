@@ -13,6 +13,56 @@ document.addEventListener("DOMContentLoaded", function () {
     var map1 = L.map('map1',{ zoomControl: false }).setView([51.505, -0.09], 13);
     var map2 = L.map('map2',{ zoomControl: false }).setView([51.505, -0.09], 13);
     
+    // Add map divider functionality
+    const divider = document.getElementById('map-divider');
+    const mapContainer = document.getElementById('map-container');
+    const map1Element = document.getElementById('map1');
+    const map2Element = document.getElementById('map2');
+    let isDragging = false;
+    let startX;
+    let startWidth1;
+    let startWidth2;
+
+    divider.addEventListener('mousedown', function(e) {
+        isDragging = true;
+        startX = e.clientX;
+        startWidth1 = map1Element.offsetWidth;
+        startWidth2 = map2Element.offsetWidth;
+        
+        // Add event listeners for mouse move and up
+        document.addEventListener('mousemove', handleMouseMove);
+        document.addEventListener('mouseup', handleMouseUp);
+        
+        // Prevent text selection while dragging
+        e.preventDefault();
+    });
+
+    function handleMouseMove(e) {
+        if (!isDragging) return;
+        
+        const deltaX = e.clientX - startX;
+        const newWidth1 = startWidth1 + deltaX;
+        const newWidth2 = startWidth2 - deltaX;
+        
+        // Check if new widths are within minimum bounds
+        if (newWidth1 >= 200 && newWidth2 >= 200) {
+            map1Element.style.flex = 'none';
+            map2Element.style.flex = 'none';
+            map1Element.style.width = newWidth1 + 'px';
+            map2Element.style.width = newWidth2 + 'px';
+            
+            // Trigger map resize events
+            map1.invalidateSize();
+            map2.invalidateSize();
+        }
+    }
+
+    function handleMouseUp() {
+        isDragging = false;
+        document.removeEventListener('mousemove', handleMouseMove);
+        document.removeEventListener('mouseup', handleMouseUp);
+    }
+
     // This add a scale to the map
     L.control.scale().addTo(map1);
     L.control.scale().addTo(map2);
@@ -258,11 +308,57 @@ document.addEventListener("DOMContentLoaded", function () {
 
             drawControl1 = new L.Control.Draw({
                 edit: { featureGroup: drawnItems1 },
-                draw: { polygon: true, polyline: true, rectangle: false, circle: false, marker: false }
+                draw: { 
+                    polygon: {
+                        allowIntersection: false,
+                        drawError: {
+                            color: '#e1e4e8',
+                            message: '<strong>Error:</strong> polygon edges cannot intersect!'
+                        },
+                        shapeOptions: {
+                            color: '#ff0000',  // Solid red
+                            fillColor: '#ff0000',  // Solid red fill
+                            fillOpacity: 1.0,  // Fully opaque
+                            weight: 5
+                        }
+                    },
+                    polyline: {
+                        shapeOptions: {
+                            color: '#ff0000',  // Solid red
+                            weight: 5
+                        }
+                    },
+                    rectangle: false,
+                    circle: false,
+                    marker: false
+                }
             });
             drawControl2 = new L.Control.Draw({
                 edit: { featureGroup: drawnItems2 },
-                draw: { polygon: true, polyline: true, rectangle: false, circle: false, marker: false }
+                draw: { 
+                    polygon: {
+                        allowIntersection: false,
+                        drawError: {
+                            color: '#e1e4e8',
+                            message: '<strong>Error:</strong> polygon edges cannot intersect!'
+                        },
+                        shapeOptions: {
+                            color: '#ff0000',  // Solid red
+                            fillColor: '#ff0000',  // Solid red fill
+                            fillOpacity: 1.0,  // Fully opaque
+                            weight: 5
+                        }
+                    },
+                    polyline: {
+                        shapeOptions: {
+                            color: '#ff0000',  // Solid red
+                            weight: 5
+                        }
+                    },
+                    rectangle: false,
+                    circle: false,
+                    marker: false
+                }
             });
 
             map1.addControl(drawControl1);
@@ -361,6 +457,27 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
+    document.getElementById('getBuildingsButton').addEventListener('click', getBuildings);
+
+    let isGetBuildingsActive = false;
+
+    function turnOffGetBuildings(){
+        console.log("Turning off click")
+        map1.off('click');
+        getBuildingsButton.innerText = "Get Buildings";
+        getBuildingsButton.style.backgroundColor = appSettings.buttons.offColor;
+        
+        // Re-enable map interaction
+        map1.dragging.enable();
+        map1.scrollWheelZoom.enable();
+        map1.doubleClickZoom.enable();
+        
+        if (cursorCircle){
+            disableCursorCircle(cursorCircle);
+            cursorCircle = null;
+        }
+    }
+
     const spinner = document.getElementById("spinner");
     function showSpinner() {
         spinner.classList.remove("hidden");
@@ -369,6 +486,7 @@ document.addEventListener("DOMContentLoaded", function () {
         spinner.classList.add("hidden");
     }
 
+    let poiMarkers = [];
     function getPOIs() {
         isGetPOIsActive = !isGetPOIsActive;
         const getPoisButton = document.getElementById('getPoisButton');
@@ -388,7 +506,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
             function handleClick(e) {
                 const { lat, lng } = e.latlng;
-                const radius = 100;
+                const radius = 500;
                 console.log('Fetching POIs at:', lat, lng, 'Radius:', radius);
                 showSpinner();
 
@@ -416,14 +534,38 @@ document.addEventListener("DOMContentLoaded", function () {
                         throw new Error(data.error);
                     }
                     console.log("POI data received:", data);
-                    // You can add code here to display POIs on the map
-                turnOffGetPOIs()
-                hideSpinner();
+                    
+                    // Access the elements array from the response, filter unwanted amenities
+                    let poiArray = data.elements || [];
+                    console.log(poiArray.length)
+                    poiArray = poiArray.filter(element => element.type !== "way");
+                    console.log(poiArray.length)
+                    const excludedAmenities = ["bicycle_parking", "parking", "bench", "telephone"];
+                    poiArray = poiArray.filter(element => 
+                        element.tags &&
+                        !excludedAmenities.includes(element.tags.amenity)
+                    );
+                    console.log(poiArray.length)
+
+                    resetPOIMarkers(poiMarkers);
+                    poiArray.forEach(poi => {
+                        if (poi.lat && poi.lon) {
+                            const marker = L.marker([poi.lat, poi.lon])
+                                .addTo(map1)
+                                .bindPopup(`<strong>${poi.tags.name}</strong><br>${poi.tags.amenity}`);
+                            poiMarkers.push(marker);
+                        }
+                    });
+                    
+                    turnOffGetPOIs()
+                    hideSpinner();
                 })
                 .catch(error => {
                     console.error("Error fetching POIs:", error);
                     alert("Error fetching POIs: " + error.message);
                     map1.off('click');
+                    turnOffGetPOIs()
+                    hideSpinner();
                 });
             }
 
@@ -433,6 +575,110 @@ document.addEventListener("DOMContentLoaded", function () {
         
         else {
             turnOffGetPOIs()
+        }
+    }
+
+    
+    let buildingContours = [];
+    function getBuildings() {
+        isGetBuildingsActive = !isGetBuildingsActive;
+        const getBuildingsButton = document.getElementById('getBuildingsButton');
+
+        if (isGetBuildingsActive) {
+            console.log("Building mode enabled");
+            getBuildingsButton.innerText = "Stop Getting Buildings";
+            getBuildingsButton.style.backgroundColor = appSettings.buttons.onColor;
+            
+            // Disable map interaction
+            map1.dragging.disable();
+            map1.scrollWheelZoom.disable();
+            map1.doubleClickZoom.disable();
+            
+            cursorCircle = enableCursorCircle(map1, cursorCircle);
+            console.log(cursorCircle)
+
+            function handleClick(e) {
+                const { lat, lng } = e.latlng;
+                const radius = 500;
+                const queryLimit = 20;
+                console.log('Fetching Buildings at:', lat, lng, 'Radius:', radius);
+                showSpinner();
+
+                fetch("/get_buildings", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Accept": "application/json"
+                    },
+                    body: JSON.stringify({
+                        lat: lat,
+                        lon: lng,
+                        radius: radius,
+                        query_limit: queryLimit
+                    })
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response.json();
+                    
+                })
+                .then(data => {
+                    if (data.error) {
+                        throw new Error(data.error);
+                    }
+                    console.log("Building polygon data received:", data);
+                    
+                    const nodeMap = {};
+                    const ways = [];
+                    // Separate elements
+                    data.elements.forEach(el => {
+                        if (el.type === "node") {
+                            nodeMap[el.id] = [el.lat, el.lon];
+                        } else if (el.type === "way") {
+                            ways.push(el);
+                        }
+                    });
+
+                    console.log(ways)
+                    console.log(nodeMap)
+
+                    // Reconstruct and draw each building polygon
+                    ways.forEach(way => {
+                        const latlngs = way.nodes
+                            .map(nodeId => nodeMap[nodeId])
+                            .filter(coord => coord);  // filter out undefined nodes
+
+                        console.log("adding to map")
+                        console.log(latlngs)
+                        const polygon = L.polygon(latlngs, {
+                            color: "red",
+                            weight: 2,
+                            fillOpacity: 0.3
+                        }).addTo(map1);
+
+                        polygon.bindPopup(`<strong>${way.tags?.name || "Unnamed"}</strong><br>${way.tags?.building || "Building"}`);
+                    });
+                                        
+                    turnOffGetBuildings()
+                    hideSpinner();
+                })
+                .catch(error => {
+                    console.error("Error fetching Buildings:", error);
+                    alert("Error fetching Buildings: " + error.message);
+                    map1.off('click');
+                    turnOffGetBuildings()
+                    hideSpinner();
+                });
+            }
+
+            map1.on('click', handleClick);
+
+        } 
+        
+        else {
+            turnOffGetBuildings()
         }
     }
     
