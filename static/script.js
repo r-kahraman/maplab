@@ -223,7 +223,9 @@ document.addEventListener("DOMContentLoaded", function () {
                 bnw_cartoDB1.setOpacity(1);
             }
             else if (layerType === 'hillshade') {
-                Hillshade1.setOpacity(1);
+                Hillshade1.setOpacity(0.63);
+                satellite1.setOpacity(1);
+                overlayLayer1.setOpacity(1);
             }
             else if (layerType === 'watercolor') {
                 Stadia_StamenToner.setOpacity(1);
@@ -251,7 +253,9 @@ document.addEventListener("DOMContentLoaded", function () {
                 bnw_cartoDB2.setOpacity(1);
             }
             else if (layerType === 'hillshade') {
-                Hillshade2.setOpacity(1);
+                Hillshade2.setOpacity(0.63);
+                satellite2.setOpacity(1);
+                overlayLayer2.setOpacity(1);
             }
             else if (layerType === 'watercolor') {
                 Stadia_StamenWatercolor.setOpacity(1);
@@ -686,7 +690,7 @@ document.addEventListener("DOMContentLoaded", function () {
     document.getElementById('addTopoButton').addEventListener('click', getTopoContours);
     let contourLayer;
     function getTopoContours(){
-        divisionCount = 6
+        divisionCount = 7
         // 1. Get map bounds
         const bounds = map1.getBounds();  // assuming you're working with map1
         showSpinner();
@@ -725,7 +729,7 @@ document.addEventListener("DOMContentLoaded", function () {
             contourLayer = L.geoJSON(features, {
                 style: feature => ({
                     color: getContourColor(feature.properties.elev, levels),
-                    weight: 1
+                    weight: 2
                 })
             }).addTo(map1);
             //console.log(`Elevation range: ${minElev} - ${maxElev}`);

@@ -260,15 +260,7 @@ function resetPOIMarkers(poiMarkers) {
 }
 
 function getContourColor(elev, levels) {
-    // make sure that less than 0 elevation just counts as 0
-    // if (minElev <= 0) {
-    //     minElev = 0
-    // }
-
-    return elev > 1000 ? '#800026' :
-           elev > 500  ? '#BD0026' :
-           elev > 200  ? '#E31A1C' :
-           elev > 100  ? '#FC4E2A' :
-           elev > 50   ? '#FD8D3C' :
-                         '#FEB24C';
+    const index = levels.indexOf(elev);
+    const gradient = ['#4c88aa', '#00aa00', '#558000', '#806000', '#995522', '#4d2a00', '#000000' ];
+    return index !== -1 ? gradient[index] : '#808080';  // fallback to gray if not found
 }

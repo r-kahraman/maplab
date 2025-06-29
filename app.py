@@ -204,10 +204,10 @@ def create_app():
                                 feat = geojson.Feature(geometry=mapping(line), properties={"elev": level})
                                 features.append(feat)
                                 
-                unique_levels = np.unique(levels)
+                #unique_levels = np.unique(levels)
 
                 return jsonify({'features': geojson.FeatureCollection(features),
-                                'levels': unique_levels
+                                'levels': levels
                                 })
 
     return app
