@@ -82,7 +82,8 @@ document.addEventListener("DOMContentLoaded", function () {
         Hillshade1: Hillshade1,
         Hillshade2: Hillshade2,
         bnw_cartoDB1: bnw_cartoDB1,
-        bnw_cartoDB2: bnw_cartoDB2
+        bnw_cartoDB2: bnw_cartoDB2,
+        openTopoMap: openTopoMap //UNUSED right now, might need later
     } = createTileLayers();
     // Add all layers to both maps initially
     satellite1.addTo(map1);
@@ -221,7 +222,7 @@ document.addEventListener("DOMContentLoaded", function () {
             else if (layerType === 'bw') {
                 bnw_cartoDB1.setOpacity(1);
             }
-            else if (layerType === 'topography') {
+            else if (layerType === 'hillshade') {
                 Hillshade1.setOpacity(1);
             }
             else if (layerType === 'watercolor') {
@@ -249,7 +250,7 @@ document.addEventListener("DOMContentLoaded", function () {
             else if (layerType === 'bw') {
                 bnw_cartoDB2.setOpacity(1);
             }
-            else if (layerType === 'topography') {
+            else if (layerType === 'hillshade') {
                 Hillshade2.setOpacity(1);
             }
             else if (layerType === 'watercolor') {
@@ -682,4 +683,67 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
     
+    document.getElementById('addTopoButton').addEventListener('click', getTopoContours);
+    let contourLayer;
+    function getTopoContours(){
+        divisionCount = 6
+        // 1. Get map bounds
+        const bounds = map1.getBounds();  // assuming you're working with map1
+        showSpinner();
+        const bbox = {
+            south: bounds.getSouth(),
+            west: bounds.getWest(),
+            north: bounds.getNorth(),
+            east: bounds.getEast()
+        };
+
+        // 2. POST to backend
+        fetch('/get-elevation-contours', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ bounds: bbox,
+                divisionCount: divisionCount
+             })
+        })
+        .then(response => {
+            if (!response.ok) throw new Error('Failed to fetch contours');
+            return response.json();
+        })
+        .then(data => {
+            // 3.Separate the parts of the response
+            const features = data.features;
+            const levels = data.levels;
+
+            // 4. Remove existing contours if needed
+            if (contourLayer) {
+                contourLayer.remove();
+            }
+            //features.forEach((feature) => console.log(feature.properties.elev))
+            // 5. Add new contours
+            contourLayer = L.geoJSON(features, {
+                style: feature => ({
+                    color: getContourColor(feature.properties.elev, levels),
+                    weight: 1
+                })
+            }).addTo(map1);
+            //console.log(`Elevation range: ${minElev} - ${maxElev}`);
+
+            hideSpinner();
+        })
+        .catch(err => {
+            console.error('Error retrieving contour lines:', err);
+        });
+    }
+
+    document.getElementById('deleteTopoButton').addEventListener('click', deleteTopoContours);
+    function deleteTopoContours() {
+        if (contourLayer) {
+            contourLayer.remove();
+            contourLayer = null;
+        }
+    }
+
+
 });

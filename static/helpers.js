@@ -107,6 +107,11 @@ function createTileLayers() {
         maxZoom: 20
     })
 
+    var openTopoMap = L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
+        maxZoom: 17,
+        attribution: 'Map data © OpenTopoMap (CC-BY-SA)'
+      })
+
     return {
         satellite1,
         satellite2,
@@ -121,7 +126,8 @@ function createTileLayers() {
         Hillshade1,
         Hillshade2,
         bnw_cartoDB1,
-        bnw_cartoDB2
+        bnw_cartoDB2,
+        openTopoMap
     };
 }
 
@@ -251,4 +257,18 @@ function resetPOIMarkers(poiMarkers) {
         marker.remove();
     });
     poiMarkers = [];
+}
+
+function getContourColor(elev, levels) {
+    // make sure that less than 0 elevation just counts as 0
+    // if (minElev <= 0) {
+    //     minElev = 0
+    // }
+
+    return elev > 1000 ? '#800026' :
+           elev > 500  ? '#BD0026' :
+           elev > 200  ? '#E31A1C' :
+           elev > 100  ? '#FC4E2A' :
+           elev > 50   ? '#FD8D3C' :
+                         '#FEB24C';
 }

@@ -1,10 +1,19 @@
 from flask import Flask, render_template, request, jsonify
+import elevation
+import rasterio
+import tempfile
+import os
+import geojson
+from skimage import measure
+import numpy as np
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 import requests
 from geoalchemy2.shape import from_shape
 from shapely.geometry import Point, Polygon, MultiPolygon
+from shapely.geometry import LineString, mapping
 from requests.exceptions import Timeout, RequestException
+
 
 db = SQLAlchemy()
 
@@ -152,5 +161,53 @@ def create_app():
     
         except RequestException as e:
             return jsonify({"error": f"E error: {str(e)}"}), 500
-        
+    
+    @app.route("/get-elevation-contours", methods=["POST"])
+    def get_elevation_contours():
+        bounds = request.json['bounds']
+        division_count = request.json['divisionCount']
+
+        south, west, north, east = bounds['south'], bounds['west'], bounds['north'], bounds['east']
+
+        with tempfile.TemporaryDirectory() as tmpdir:
+            dem_path = os.path.join(tmpdir, 'dem.tif')
+
+            # Step 1: Download DEM
+            elevation.clip(bounds=(west, south, east, north), output=dem_path)
+            unique_levels = []
+            # Step 2: Read the raster
+            with rasterio.open(dem_path) as src:
+                band = src.read(1)  # elevation values
+                band[band < 0] = 0
+                transform = src.transform
+
+            # Step 3: Create contour lines
+                min_elev = int(np.nanmin(band))
+                max_elev = int(np.nanmax(band))
+                
+                # Calculate interval to ensure 10 divisions
+                elevation_range = max_elev - min_elev
+                interval = max(1, elevation_range // division_count)  # Ensure minimum interval of 1
+                
+                levels = list(range(min_elev, max_elev + 1, interval))
+
+                features = []
+
+                for level in levels:
+                    if not (level < 0):
+                        contours = measure.find_contours(band, level)
+                        for contour in contours:
+                            # Convert image coords to geospatial coords
+                            coords = [rasterio.transform.xy(transform, y, x) for y, x in contour]
+                            if len(coords) > 1:
+                                line = LineString(coords)
+                                feat = geojson.Feature(geometry=mapping(line), properties={"elev": level})
+                                features.append(feat)
+                                
+                unique_levels = np.unique(levels)
+
+                return jsonify({'features': geojson.FeatureCollection(features),
+                                'levels': unique_levels
+                                })
+
     return app
