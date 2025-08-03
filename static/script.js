@@ -64,8 +64,8 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // This add a scale to the map
-    L.control.scale().addTo(map1);
-    L.control.scale().addTo(map2);
+    L.control.scale({ position: 'topright' }).addTo(map1);
+    L.control.scale({ position: 'topright' }).addTo(map2);
 
     // Create all tile layers using the helper function
     const {
@@ -545,7 +545,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     console.log(poiArray.length)
                     poiArray = poiArray.filter(element => element.type !== "way");
                     console.log(poiArray.length)
-                    const excludedAmenities = ["bicycle_parking", "parking", "bench", "telephone"];
+                    const excludedAmenities = ["bicycle_parking", "parking", "bench", "telephone", "post_box"];
                     poiArray = poiArray.filter(element => 
                         element.tags &&
                         !excludedAmenities.includes(element.tags.amenity)
@@ -645,9 +645,9 @@ document.addEventListener("DOMContentLoaded", function () {
                             ways.push(el);
                         }
                     });
-
-                    console.log(ways)
-                    console.log(nodeMap)
+                    console.log("ways is:", ways)
+                    //console.log(ways)
+                    console.log("nodemap is: ",nodeMap)
 
                     // Reconstruct and draw each building polygon
                     ways.forEach(way => {
@@ -660,7 +660,7 @@ document.addEventListener("DOMContentLoaded", function () {
                         const polygon = L.polygon(latlngs, {
                             color: "red",
                             weight: 2,
-                            fillOpacity: 0.3
+                            fillOpacity: 0.8
                         }).addTo(map1);
 
                         polygon.bindPopup(`<strong>${way.tags?.name || "Unnamed"}</strong><br>${way.tags?.building || "Building"}`);
@@ -688,7 +688,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
     
     document.getElementById('addTopoButton').addEventListener('click', getTopoContours);
-    let contourLayer;
+    let contourLayer; 
     function getTopoContours(){
         divisionCount = 7
         // 1. Get map bounds
