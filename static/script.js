@@ -12,6 +12,10 @@ document.addEventListener("DOMContentLoaded", function () {
     // Create the two map instances
     var map1 = L.map('map1',{ zoomControl: false }).setView([51.505, -0.09], 13);
     var map2 = L.map('map2',{ zoomControl: false }).setView([51.505, -0.09], 13);
+    console.log(map2.attributionControl)
+    
+    // Create marker layer for managing markers
+    let markerLayer = L.layerGroup();
     
     // Add map divider functionality
     const divider = document.getElementById('map-divider');
@@ -105,6 +109,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
     //Set active layers
     const activeBaseLayerMap1 = regularTheme1;  
+
+    // Toggling on and off the attributions might be necessary for the future
+    //console.log(map1.attributionControl)
+    //console.log(regularTheme1.options.attribution)
+    //map1.attributionControl.removeAttribution(regularTheme1.options.attribution); 
+
     const activeBaseLayerMap2 = regularTheme2;
     
     // Initialize geocoders for both maps and add search functionality
@@ -129,6 +139,9 @@ document.addEventListener("DOMContentLoaded", function () {
     geocoder2.addEventListener('markgeocode', function(e){
         map2.setView(e.geocode.center, map2.getZoom());
     })
+    
+    // Add marker layer to map1
+    markerLayer.addTo(map1);
 
     // Track current view state
     let isSatellite = false;
@@ -205,6 +218,7 @@ document.addEventListener("DOMContentLoaded", function () {
             map1.eachLayer(function(layer) {
                 if (layer instanceof L.TileLayer) {
                     layer.setOpacity(0);
+                    //L.Control.Attribution.removeAttribution(layer);
                 }
             });
             
@@ -439,10 +453,73 @@ document.addEventListener("DOMContentLoaded", function () {
     }
     document.getElementById('deleteDrawingsBtn').addEventListener('click', deleteDrawings);
 
+    // Functions for adding markers
+    let isGetMarkersActive = false;
+    let markerClickHandler = null;
+    
+    function addMarkers() {
+        isGetMarkersActive = !isGetMarkersActive;
+        const addMarkersBtn = document.getElementById('addMarkersBtn');
+
+        if (isGetMarkersActive) {
+            console.log("Marker mode enabled");
+            addMarkersBtn.innerText = "Finish adding markers";
+            addMarkersBtn.style.backgroundColor = appSettings.buttons.onColor;
+            
+            // Disable map interaction
+            map1.dragging.disable();
+            map1.scrollWheelZoom.disable();
+            map1.doubleClickZoom.disable();
+            
+            // Change cursor to crosshair
+            map1.getContainer().style.cursor = 'crosshair';
+            
+            // Add click handler for adding markers
+            markerClickHandler = function(e) {
+                const marker = L.marker(e.latlng).addTo(markerLayer);
+                console.log("Marker added at:", e.latlng);
+            };
+            
+            map1.on('click', markerClickHandler);
+        } else {
+            turnOffAddMarkers();
+        }
+    }
+    
+    document.getElementById('addMarkersBtn').addEventListener('click', addMarkers);
+
+    // Function to delete all markers
+    function deleteMarkers() {
+        markerLayer.clearLayers();
+        console.log('All markers deleted from the map');
+    }
+    
+    // Add event listener for delete markers button
+    document.getElementById('deleteMarkersBtn').addEventListener('click', deleteMarkers);
+
+    function turnOffAddMarkers(){
+        console.log("Turning off markers");
+        if (markerClickHandler) {
+            map1.off('click', markerClickHandler);
+            markerClickHandler = null;
+        }
+        
+        const addMarkersBtn = document.getElementById('addMarkersBtn');
+        addMarkersBtn.innerText = "Add Markers";
+        addMarkersBtn.style.backgroundColor = appSettings.buttons.offColor;
+        
+        // Reset cursor to default
+        map1.getContainer().style.cursor = '';
+        
+        // Re-enable map interaction
+        map1.dragging.enable();
+        map1.scrollWheelZoom.enable();
+        map1.doubleClickZoom.enable();
+    }
+
+    // Functions for getting POIs
     let cursorCircle = null;
-
     document.getElementById('getPoisButton').addEventListener('click', getPOIs);
-
     let isGetPOIsActive = false;
 
     function turnOffGetPOIs(){
