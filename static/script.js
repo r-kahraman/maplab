@@ -466,17 +466,26 @@ document.addEventListener("DOMContentLoaded", function () {
             addMarkersBtn.innerText = "Finish adding markers";
             addMarkersBtn.style.backgroundColor = appSettings.buttons.onColor;
             
-            // Disable map interaction
-            map1.dragging.disable();
-            map1.scrollWheelZoom.disable();
-            map1.doubleClickZoom.disable();
-            
             // Change cursor to crosshair
             map1.getContainer().style.cursor = 'crosshair';
             
             // Add click handler for adding markers
             markerClickHandler = function(e) {
                 const marker = L.marker(e.latlng).addTo(markerLayer);
+                
+                // richer content (image + title + text)
+                const html = `
+                    <div class="marker-card">
+                        <h3 class="marker-title">Sample spot</h3>
+                        <img src="/static/sample.jpg" alt="Photo" class="marker-img" />
+                        <p class="marker-desc">Short description about this place.</p>
+                    </div>
+                    `;
+                
+                marker.bindPopup(html, {
+                    maxWidth: 260,
+                    className: "marker-popup"
+                });
                 console.log("Marker added at:", e.latlng);
             };
             
@@ -510,11 +519,6 @@ document.addEventListener("DOMContentLoaded", function () {
         
         // Reset cursor to default
         map1.getContainer().style.cursor = '';
-        
-        // Re-enable map interaction
-        map1.dragging.enable();
-        map1.scrollWheelZoom.enable();
-        map1.doubleClickZoom.enable();
     }
 
     // Functions for getting POIs

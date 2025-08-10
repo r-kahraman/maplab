@@ -206,3 +206,11 @@ button:hover {
 .context-menu-item:hover {
     background-color: #f0f0f0;
 }
+
+.marker-popup .leaflet-popup-content {
+    margin: 8px 10px;
+  }
+  .marker-card { width: 220px; }
+  .marker-title { margin: 0 0 6px; font-size: 14px; color: #002a13; }
+  .marker-img { width: 100%; height: auto; border-radius: 6px; display: block; margin-bottom: 6px; }
+  .marker-desc { margin: 0; font-size: 12px; line-height: 1.35; }
