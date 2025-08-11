@@ -264,3 +264,13 @@ function getContourColor(elev, levels) {
     const gradient = ['#4c88aa', '#00aa00', '#558000', '#806000', '#995522', '#4d2a00', '#000000' ];
     return index !== -1 ? gradient[index] : '#808080';  // fallback to gray if not found
 }
+
+function countMarkers(_layer) {
+    let count = 0;
+    _layer.eachLayer(layer => {
+        if (layer instanceof L.Marker) {
+            count++;
+        }
+    });
+    return count
+}

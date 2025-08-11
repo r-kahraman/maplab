@@ -180,7 +180,7 @@ button:hover {
 
 .context-menu {
     position: fixed;
-    background: white;
+    background: rgb(255, 255, 255);
     border: 1px solid #ccc;
     border-radius: 4px;
     padding: 5px 0;
@@ -208,9 +208,17 @@ button:hover {
 }
 
 .marker-popup .leaflet-popup-content {
-    margin: 8px 10px;
+    margin: 3px 3px;
   }
-  .marker-card { width: 220px; }
+  .marker-card { width: 100px;
+    height: 100px;
+     }
   .marker-title { margin: 0 0 6px; font-size: 14px; color: #002a13; }
   .marker-img { width: 100%; height: auto; border-radius: 6px; display: block; margin-bottom: 6px; }
   .marker-desc { margin: 0; font-size: 12px; line-height: 1.35; }
+
+  /* Change background + text color for all popups */
+.leaflet-popup-content-wrapper {
+    background-color: #002a13; /* dark green */
+    color: #fcffeb; /* light text */
+  }

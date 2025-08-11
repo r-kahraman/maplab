@@ -68,8 +68,8 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // This add a scale to the map
-    L.control.scale({ position: 'topright' }).addTo(map1);
-    L.control.scale({ position: 'topright' }).addTo(map2);
+    L.control.scale({ position: 'bottomright' }).addTo(map1);
+    L.control.scale({ position: 'bottomright' }).addTo(map2);
 
     // Create all tile layers using the helper function
     const {
@@ -471,20 +471,28 @@ document.addEventListener("DOMContentLoaded", function () {
             
             // Add click handler for adding markers
             markerClickHandler = function(e) {
+                currentMarkerCount = countMarkers(markerLayer)
+                console.log(currentMarkerCount)
                 const marker = L.marker(e.latlng).addTo(markerLayer);
-                
+                // richer content (image + title + text)
+                //const html = `
+                   // <div class="marker-card">
+                    //    <h3 class="marker-title">Sample spot</h3>
+                    //    <img src="/static/sample.jpg" alt="Photo" class="marker-img" />
+                  //      <p class="marker-desc">Short description about this place.</p>
+                 //   </div>
+                 //   `;
                 // richer content (image + title + text)
                 const html = `
-                    <div class="marker-card">
-                        <h3 class="marker-title">Sample spot</h3>
-                        <img src="/static/sample.jpg" alt="Photo" class="marker-img" />
-                        <p class="marker-desc">Short description about this place.</p>
+                    <div class="marker-card">                        
+                        <img src="/static/sample${currentMarkerCount}.jpg" alt="Photo" class="marker-img" />
                     </div>
                     `;
                 
                 marker.bindPopup(html, {
                     maxWidth: 260,
-                    className: "marker-popup"
+                    className: "marker-popup",
+                    autoClose: false
                 });
                 console.log("Marker added at:", e.latlng);
             };
@@ -505,7 +513,8 @@ document.addEventListener("DOMContentLoaded", function () {
     
     // Add event listener for delete markers button
     document.getElementById('deleteMarkersBtn').addEventListener('click', deleteMarkers);
-
+    
+    
     function turnOffAddMarkers(){
         console.log("Turning off markers");
         if (markerClickHandler) {
@@ -520,6 +529,33 @@ document.addEventListener("DOMContentLoaded", function () {
         // Reset cursor to default
         map1.getContainer().style.cursor = '';
     }
+
+    let showPhotosActive = false;
+    function showOrHideMarkers(){
+        if (!showPhotosActive){
+            showPhotosActive = true;
+            showHidePhotosBtn.innerText = "Hide Photos";
+            showHidePhotosBtn.style.backgroundColor = appSettings.buttons.onColor;
+            
+            markerLayer.eachLayer(layer => {
+                if (layer instanceof L.Marker) {
+                    layer.openPopup();
+                }
+            });
+        }
+        else {
+            showPhotosActive = false;
+            showHidePhotosBtn.innerText = "Show Photos";
+            showHidePhotosBtn.style.backgroundColor = appSettings.buttons.offColor;
+
+            markerLayer.eachLayer(layer => {
+                if (layer instanceof L.Marker) {
+                    layer.closePopup();
+                }
+            });
+        }
+    }
+    document.getElementById('showHidePhotosBtn').addEventListener('click', showOrHideMarkers);
 
     // Functions for getting POIs
     let cursorCircle = null;
