@@ -26,6 +26,8 @@ document.addEventListener("DOMContentLoaded", function () {
     let startX;
     let startWidth1;
     let startWidth2;
+    //Toggle for loading only a single map, WIP
+    let loadAllMaps = false;
 
     divider.addEventListener('mousedown', function(e) {
         isDragging = true;
@@ -81,31 +83,40 @@ document.addEventListener("DOMContentLoaded", function () {
         overlayLayer2: overlayLayer2,
         Stadia_StamenToner: Stadia_StamenToner,
         Stadia_StamenWatercolor: Stadia_StamenWatercolor,
-        OSM_Mapnik1: regularTheme1,
-        OSM_Mapnik2: regularTheme2,
+        Stadia_StamenTonerBackground: Stadia_StamenTonerBackground,
+        regularTheme1: regularTheme1,
+        regularTheme2: regularTheme2,
         Hillshade1: Hillshade1,
         Hillshade2: Hillshade2,
         bnw_cartoDB1: bnw_cartoDB1,
         bnw_cartoDB2: bnw_cartoDB2,
         openTopoMap: openTopoMap //UNUSED right now, might need later
     } = createTileLayers();
-    // Add all layers to both maps initially
-    satellite1.addTo(map1);
-    satellite2.addTo(map2);
-    regularTheme1.addTo(map1);
-    regularTheme2.addTo(map2);
-    overlayLayer1.addTo(map1);
-    overlayLayer2.addTo(map2);
-    Stadia_StamenToner.addTo(map1);
-    Stadia_StamenWatercolor.addTo(map2);
-    matrixTheme1.addTo(map1);
-    matrixTheme2.addTo(map2);
-    Hillshade1.addTo(map1);
-    Hillshade2.addTo(map2);
-    bnw_cartoDB1.addTo(map1);
-    bnw_cartoDB2.addTo(map2);
-    overlayLayer1.addTo(map1);
-    overlayLayer2.addTo(map2);
+
+    if (loadAllMaps) {
+        // Add all layers to both maps initially
+        satellite1.addTo(map1);
+        satellite2.addTo(map2);
+        regularTheme1.addTo(map1);
+        regularTheme2.addTo(map2);
+        overlayLayer1.addTo(map1);
+        overlayLayer2.addTo(map2);
+        Stadia_StamenToner.addTo(map1);
+        Stadia_StamenTonerBackground.addTo(map1);
+        Stadia_StamenWatercolor.addTo(map2);
+        matrixTheme1.addTo(map1);
+        matrixTheme2.addTo(map2);
+        Hillshade1.addTo(map1);
+        Hillshade2.addTo(map2);
+        bnw_cartoDB1.addTo(map1);
+        bnw_cartoDB2.addTo(map2);
+        overlayLayer1.addTo(map1);
+        overlayLayer2.addTo(map2);
+    }
+    else {
+        regularTheme1.addTo(map1);
+        regularTheme2.addTo(map2);
+    }
 
     //Set active layers
     const activeBaseLayerMap1 = regularTheme1;  
@@ -227,8 +238,10 @@ document.addEventListener("DOMContentLoaded", function () {
                 regularTheme1.setOpacity(1);
             }
             else if (layerType === 'satellite') {
+                //overlayLayer1.setOpacity(1);
+                Stadia_StamenToner.setOpacity(0.5);
+                //Stadia_StamenTonerBackground.setOpacity(0.5);
                 satellite1.setOpacity(1);
-                overlayLayer1.setOpacity(1);
             }
             else if (layerType === 'dark') {
                 matrixTheme1.setOpacity(1);
@@ -254,6 +267,7 @@ document.addEventListener("DOMContentLoaded", function () {
             });
             if (layerType === 'regular') {
                 //activeBaseLayerMap1 = regularTheme1;
+
                 regularTheme2.setOpacity(1);
             }
             else if (layerType === 'satellite') {

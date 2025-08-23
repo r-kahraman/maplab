@@ -21,14 +21,36 @@ function createTileLayers() {
         attribution: '&copy; Esri &mdash; Source: Esri, Maxar, Earthstar Geographics',
         opacity: 0  // Start invisible
     });
+    //
+    // TESTING DIFFERENT REGULAR THEMES - WIP
+    //
+    // var regularTheme1 = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    //     maxZoom: 19,
+    //     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    // });
 
-    var regularTheme1 = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; CARTO',
-        opacity: 1  // Start visible
+    // var regularTheme2 = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    //     maxZoom: 19,
+    //     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    // });
+
+    var regularTheme1 = L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+        subdomains: 'abcd',
+        maxZoom: 20
     });
-    var regularTheme2 = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; CARTO',
-        opacity: 1  // Start visible
+
+    var regularTheme2 = L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+        subdomains: 'abcd',
+        maxZoom: 20
+    });
+
+    var regularTheme1 = L.tileLayer('https://tile.jawg.io/jawg-sunny/{z}/{x}/{y}{r}.png?access-token={accessToken}', {
+        attribution: '<a href="https://jawg.io" title="Tiles Courtesy of Jawg Maps" target="_blank">&copy; <b>Jawg</b>Maps</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+        minZoom: 0,
+        maxZoom: 22,
+        accessToken: 'xJYhWynlw5VQKxK0KqzKoBnuAnsNBB9PxrC33Fl0kBOPYwqg5kcNlP50fkY0kU9A'
     });
     
     // Create overlay layer for geographic information
@@ -46,14 +68,14 @@ function createTileLayers() {
         subdomains: 'abcd'
     });
     
-    var matrixTheme1 = L.tileLayer('https://tile.jawg.io/jawg-matrix/{z}/{x}/{y}{r}.png?access-token={accessToken}', {
+    var matrixTheme1 = L.tileLayer('https://tile.jawg.io/jawg-dark/{z}/{x}/{y}{r}.png?access-token={accessToken}', {
         attribution: '<a href="https://jawg.io" title="Tiles Courtesy of Jawg Maps" target="_blank">&copy; <b>Jawg</b>Maps</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
         opacity: 1,  // Start visible
         minZoom: 0,
         maxZoom: 22,
         accessToken: 'xJYhWynlw5VQKxK0KqzKoBnuAnsNBB9PxrC33Fl0kBOPYwqg5kcNlP50fkY0kU9A'
     });
-    var matrixTheme2 = L.tileLayer('https://tile.jawg.io/jawg-matrix/{z}/{x}/{y}{r}.png?access-token={accessToken}', {
+    var matrixTheme2 = L.tileLayer('https://tile.jawg.io/jawg-dark/{z}/{x}/{y}{r}.png?access-token={accessToken}', {
         attribution: '<a href="https://jawg.io" title="Tiles Courtesy of Jawg Maps" target="_blank">&copy; <b>Jawg</b>Maps</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
         opacity: 1,  // Start visible
         minZoom: 0,
@@ -75,15 +97,6 @@ function createTileLayers() {
         ext: 'jpg'
     });
 
-    var OSM_Mapnik1 = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        maxZoom: 19,
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-    });
-
-    var OSM_Mapnik2 = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        maxZoom: 19,
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-    });
 
     var Hillshade1 = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Elevation/World_Hillshade/MapServer/tile/{z}/{y}/{x}', {
         attribution: 'Tiles &copy; Esri — Source: USGS, Esri, TANA, DeLorme',
@@ -112,6 +125,14 @@ function createTileLayers() {
         attribution: 'Map data © OpenTopoMap (CC-BY-SA)'
       })
 
+    var Stadia_StamenTonerBackground = L.tileLayer('https://tiles.stadiamaps.com/tiles/stamen_toner_background/{z}/{x}/{y}{r}.{ext}', {
+        minZoom: 0,
+        maxZoom: 20,
+        attribution: '&copy; <a href="https://www.stadiamaps.com/" target="_blank">Stadia Maps</a> &copy; <a href="https://www.stamen.com/" target="_blank">Stamen Design</a> &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+        ext: 'png'
+    });
+    
+
     return {
         satellite1,
         satellite2,
@@ -120,9 +141,10 @@ function createTileLayers() {
         overlayLayer1,
         overlayLayer2,
         Stadia_StamenToner,
+        Stadia_StamenTonerBackground,
         Stadia_StamenWatercolor,
-        OSM_Mapnik1,
-        OSM_Mapnik2,
+        regularTheme1,
+        regularTheme2,
         Hillshade1,
         Hillshade2,
         bnw_cartoDB1,
