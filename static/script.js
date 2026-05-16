@@ -1,3 +1,6 @@
+import { initializeMapLayers } from './config.js';
+import { createTileLayers } from './helpers.js';
+
 console.log("Script is running!"); // This should appear in the console
 
 // Check if Leaflet is loaded
@@ -14,6 +17,10 @@ document.addEventListener("DOMContentLoaded", function () {
     var map2 = L.map('map2',{ zoomControl: false }).setView([51.505, -0.09], 13);
     console.log(map2.attributionControl)
     
+    // Call the config function
+    const activeLayers = initializeMapLayers(map1, map2);
+    console.log("Layers configured successfully!", activeLayers);
+    
     // Create marker layer for managing markers
     let markerLayer = L.layerGroup();
     
@@ -27,7 +34,6 @@ document.addEventListener("DOMContentLoaded", function () {
     let startWidth1;
     let startWidth2;
     
-
     divider.addEventListener('mousedown', function(e) {
         isDragging = true;
         startX = e.clientX;

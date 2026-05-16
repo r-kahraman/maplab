@@ -10,7 +10,7 @@ var appSettings = {
 }
 
 // Function to create tile layers
-function createTileLayers() {
+export function createTileLayers() {
     // Tile layers
     var satellite1 = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
         attribution: '&copy; Esri &mdash; Source: Esri, Maxar, Earthstar Geographics',
@@ -153,7 +153,7 @@ function createTileLayers() {
     };
 }
 
-function copyLayerShapes(layers) {
+export function copyLayerShapes(layers) {
     let layerCopies = [];
     let layerCopy;
     layers.forEach(layer => {
