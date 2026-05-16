@@ -26,8 +26,7 @@ document.addEventListener("DOMContentLoaded", function () {
     let startX;
     let startWidth1;
     let startWidth2;
-    //Toggle for loading only a single map, WIP
-    let loadAllMaps = false;
+    
 
     divider.addEventListener('mousedown', function(e) {
         isDragging = true;
@@ -72,61 +71,6 @@ document.addEventListener("DOMContentLoaded", function () {
     // This add a scale to the map
     L.control.scale({ position: 'bottomright' }).addTo(map1);
     L.control.scale({ position: 'bottomright' }).addTo(map2);
-
-    // Create all tile layers using the helper function
-    const {
-        satellite1: satellite1,
-        satellite2: satellite2,
-        matrixTheme1: matrixTheme1,
-        matrixTheme2: matrixTheme2,
-        overlayLayer1: overlayLayer1,
-        overlayLayer2: overlayLayer2,
-        Stadia_StamenToner: Stadia_StamenToner,
-        Stadia_StamenWatercolor: Stadia_StamenWatercolor,
-        Stadia_StamenTonerBackground: Stadia_StamenTonerBackground,
-        regularTheme1: regularTheme1,
-        regularTheme2: regularTheme2,
-        Hillshade1: Hillshade1,
-        Hillshade2: Hillshade2,
-        bnw_cartoDB1: bnw_cartoDB1,
-        bnw_cartoDB2: bnw_cartoDB2,
-        openTopoMap: openTopoMap //UNUSED right now, might need later
-    } = createTileLayers();
-
-    if (loadAllMaps) {
-        // Add all layers to both maps initially
-        satellite1.addTo(map1);
-        satellite2.addTo(map2);
-        regularTheme1.addTo(map1);
-        regularTheme2.addTo(map2);
-        overlayLayer1.addTo(map1);
-        overlayLayer2.addTo(map2);
-        Stadia_StamenToner.addTo(map1);
-        Stadia_StamenTonerBackground.addTo(map1);
-        Stadia_StamenWatercolor.addTo(map2);
-        matrixTheme1.addTo(map1);
-        matrixTheme2.addTo(map2);
-        Hillshade1.addTo(map1);
-        Hillshade2.addTo(map2);
-        bnw_cartoDB1.addTo(map1);
-        bnw_cartoDB2.addTo(map2);
-        overlayLayer1.addTo(map1);
-        overlayLayer2.addTo(map2);
-    }
-    else {
-        regularTheme1.addTo(map1);
-        regularTheme2.addTo(map2);
-    }
-
-    //Set active layers
-    const activeBaseLayerMap1 = regularTheme1;  
-
-    // Toggling on and off the attributions might be necessary for the future
-    //console.log(map1.attributionControl)
-    //console.log(regularTheme1.options.attribution)
-    //map1.attributionControl.removeAttribution(regularTheme1.options.attribution); 
-
-    const activeBaseLayerMap2 = regularTheme2;
     
     // Initialize geocoders for both maps and add search functionality
     const geocoder1 = new L.Control.Geocoder({
@@ -238,9 +182,9 @@ document.addEventListener("DOMContentLoaded", function () {
                 regularTheme1.setOpacity(1);
             }
             else if (layerType === 'satellite') {
-                //overlayLayer1.setOpacity(1);
-                Stadia_StamenToner.setOpacity(0.5);
-                //Stadia_StamenTonerBackground.setOpacity(0.5);
+                overlayLayer1.setOpacity(1);
+                //Stadia_StamenToner.setOpacity(0.5);
+                Stadia_StamenTonerBackground.setOpacity(0.2);
                 satellite1.setOpacity(1);
             }
             else if (layerType === 'dark') {
