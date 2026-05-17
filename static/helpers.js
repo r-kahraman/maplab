@@ -1,4 +1,4 @@
-var appSettings = {
+export const appSettings = {
     buttons: {
         onColor: '#953813',
         offColor: '#238a37'
@@ -12,41 +12,35 @@ var appSettings = {
 // Function to create tile layers
 export function createTileLayers() {
     // Tile layers
-    var satellite1 = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+    const satellite1 = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
         attribution: '&copy; Esri &mdash; Source: Esri, Maxar, Earthstar Geographics',
         opacity: 0  // Start invisible
     });
     
-    var satellite2 = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+    const satellite2 = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
         attribution: '&copy; Esri &mdash; Source: Esri, Maxar, Earthstar Geographics',
         opacity: 0  // Start invisible
     });
     //
     // TESTING DIFFERENT REGULAR THEMES - WIP
     //
-    // var regularTheme1 = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    // const regularTheme1 = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
     //     maxZoom: 19,
     //     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
     // });
 
-    // var regularTheme2 = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    // const regularTheme2 = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
     //     maxZoom: 19,
     //     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
     // });
 
-    var regularTheme1 = L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+    const regularTheme1 = L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
         subdomains: 'abcd',
         maxZoom: 20
     });
 
-    var regularTheme1 = L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
-        subdomains: 'abcd',
-        maxZoom: 20
-    });
-
-    var regularTheme2 = L.tileLayer('https://tile.jawg.io/jawg-sunny/{z}/{x}/{y}{r}.png?access-token={accessToken}', {
+    const regularTheme2 = L.tileLayer('https://tile.jawg.io/jawg-sunny/{z}/{x}/{y}{r}.png?access-token={accessToken}', {
         attribution: '<a href="https://jawg.io" title="Tiles Courtesy of Jawg Maps" target="_blank">&copy; <b>Jawg</b>Maps</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
         minZoom: 0,
         maxZoom: 22,
@@ -54,28 +48,28 @@ export function createTileLayers() {
     });
     
     // Create overlay layer for geographic information
-    var overlayLayer1 = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_only_labels/{z}/{x}/{y}.png', {
+    const overlayLayer1 = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_only_labels/{z}/{x}/{y}.png', {
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; CARTO',
         opacity: 0,
         pane: 'overlayPane',
         subdomains: 'abcd'
     });
     
-    var overlayLayer2 = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_only_labels/{z}/{x}/{y}.png', {
+    const overlayLayer2 = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_only_labels/{z}/{x}/{y}.png', {
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; CARTO',
         opacity: 0,
         pane: 'overlayPane',
         subdomains: 'abcd'
     });
     
-    var matrixTheme1 = L.tileLayer('https://tile.jawg.io/jawg-dark/{z}/{x}/{y}{r}.png?access-token={accessToken}', {
+    const matrixTheme1 = L.tileLayer('https://tile.jawg.io/jawg-dark/{z}/{x}/{y}{r}.png?access-token={accessToken}', {
         attribution: '<a href="https://jawg.io" title="Tiles Courtesy of Jawg Maps" target="_blank">&copy; <b>Jawg</b>Maps</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
         opacity: 1,  // Start visible
         minZoom: 0,
         maxZoom: 22,
         accessToken: 'xJYhWynlw5VQKxK0KqzKoBnuAnsNBB9PxrC33Fl0kBOPYwqg5kcNlP50fkY0kU9A'
     });
-    var matrixTheme2 = L.tileLayer('https://tile.jawg.io/jawg-dark/{z}/{x}/{y}{r}.png?access-token={accessToken}', {
+    const matrixTheme2 = L.tileLayer('https://tile.jawg.io/jawg-dark/{z}/{x}/{y}{r}.png?access-token={accessToken}', {
         attribution: '<a href="https://jawg.io" title="Tiles Courtesy of Jawg Maps" target="_blank">&copy; <b>Jawg</b>Maps</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
         opacity: 1,  // Start visible
         minZoom: 0,
@@ -83,14 +77,14 @@ export function createTileLayers() {
         accessToken: 'xJYhWynlw5VQKxK0KqzKoBnuAnsNBB9PxrC33Fl0kBOPYwqg5kcNlP50fkY0kU9A'
     });
 
-    var Stadia_StamenToner = L.tileLayer('https://tiles.stadiamaps.com/tiles/stamen_toner/{z}/{x}/{y}{r}.{ext}', {
+    const Stadia_StamenToner = L.tileLayer('https://tiles.stadiamaps.com/tiles/stamen_toner/{z}/{x}/{y}{r}.{ext}', {
         minZoom: 0,
         maxZoom: 20,
         attribution: '&copy; <a href="https://www.stadiamaps.com/" target="_blank">Stadia Maps</a> &copy; <a href="https://www.stamen.com/" target="_blank">Stamen Design</a> &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
         ext: 'png'
     });
 
-    var Stadia_StamenWatercolor = L.tileLayer('https://tiles.stadiamaps.com/tiles/stamen_watercolor/{z}/{x}/{y}.{ext}', {
+    const Stadia_StamenWatercolor = L.tileLayer('https://tiles.stadiamaps.com/tiles/stamen_watercolor/{z}/{x}/{y}.{ext}', {
         minZoom: 1,
         maxZoom: 16,
         attribution: '&copy; <a href="https://www.stadiamaps.com/" target="_blank">Stadia Maps</a> &copy; <a href="https://www.stamen.com/" target="_blank">Stamen Design</a> &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
@@ -98,40 +92,56 @@ export function createTileLayers() {
     });
 
 
-    var Hillshade1 = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Elevation/World_Hillshade/MapServer/tile/{z}/{y}/{x}', {
+    const Hillshade1 = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Elevation/World_Hillshade/MapServer/tile/{z}/{y}/{x}', {
         attribution: 'Tiles &copy; Esri — Source: USGS, Esri, TANA, DeLorme',
         maxZoom: 16
       })
 
-    var Hillshade2 = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Elevation/World_Hillshade/MapServer/tile/{z}/{y}/{x}', {
+    const Hillshade2 = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Elevation/World_Hillshade/MapServer/tile/{z}/{y}/{x}', {
     attribution: 'Tiles &copy; Esri — Source: USGS, Esri, TANA, DeLorme',
     maxZoom: 16
     })
 
-    var bnw_cartoDB1 = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+    const bnw_cartoDB1 = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
         subdomains: 'abcd',
         maxZoom: 20
     });
     
-    var bnw_cartoDB2 = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+    const bnw_cartoDB2 = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
         subdomains: 'abcd',
         maxZoom: 20
     })
 
-    var openTopoMap = L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
+    const openTopoMap = L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
         maxZoom: 17,
         attribution: 'Map data © OpenTopoMap (CC-BY-SA)'
       })
 
-    var Stadia_StamenTonerBackground = L.tileLayer('https://tiles.stadiamaps.com/tiles/stamen_toner_background/{z}/{x}/{y}{r}.{ext}', {
+    const Stadia_StamenTonerBackground = L.tileLayer('https://tiles.stadiamaps.com/tiles/stamen_toner_background/{z}/{x}/{y}{r}.{ext}', {
         minZoom: 0,
         maxZoom: 20,
         attribution: '&copy; <a href="https://www.stadiamaps.com/" target="_blank">Stadia Maps</a> &copy; <a href="https://www.stamen.com/" target="_blank">Stamen Design</a> &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
         ext: 'png'
     });
     
+    const Thunderforest_Pioneer = L.tileLayer('https://api.thunderforest.com/pioneer/{z}/{x}/{y}{r}.png?apikey=b1f7fe747a6e4278b67f16f1defccb5f', {
+        attribution: '&copy; <a href="http://www.thunderforest.com/">Thunderforest</a>, &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+        apikey: '<your apikey>',
+        maxZoom: 22
+    });
+
+    const BaseMapDE_Grey = L.tileLayer('https://sgx.geodatenzentrum.de/wmts_basemapde/tile/1.0.0/de_basemapde_web_raster_grau/default/GLOBAL_WEBMERCATOR/{z}/{y}/{x}.png', {
+        attribution: 'Map data: &copy; <a href="http://www.govdata.de/dl-de/by-2-0">dl-de/by-2-0</a>'
+    });
+
+    const Stadia_StamenTerrain = L.tileLayer('https://tiles.stadiamaps.com/tiles/stamen_terrain/{z}/{x}/{y}{r}.{ext}', {
+        minZoom: 0,
+        maxZoom: 18,
+        attribution: '&copy; <a href="https://www.stadiamaps.com/" target="_blank">Stadia Maps</a> &copy; <a href="https://www.stamen.com/" target="_blank">Stamen Design</a> &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+        ext: 'png'
+    });
 
     return {
         satellite1,
@@ -149,7 +159,10 @@ export function createTileLayers() {
         Hillshade2,
         bnw_cartoDB1,
         bnw_cartoDB2,
-        openTopoMap
+        openTopoMap,
+        Thunderforest_Pioneer,
+        BaseMapDE_Grey,
+        Stadia_StamenTerrain
     };
 }
 
@@ -244,7 +257,7 @@ function switchView(isSatellite, listMaps, listCurrentLayers,
     return !isSatellite;  // Return the new state (opposite of current state)
 } 
 
-function enableCursorCircle(map, cursorCircle) {
+export function enableCursorCircle(map, cursorCircle) {
     if (!cursorCircle) {
         console.log("Start value of cursorCircle: ", cursorCircle)
         cursorCircle = document.createElement("div");
@@ -265,7 +278,7 @@ function enableCursorCircle(map, cursorCircle) {
     return cursorCircle;
 }
 
-function disableCursorCircle(cursorCircle) {
+export function disableCursorCircle(cursorCircle) {
     console.log('test before removing cursor circle')
     if (cursorCircle && cursorCircle.parentNode) {
         console.log('disabling cursor circle')
@@ -274,25 +287,15 @@ function disableCursorCircle(cursorCircle) {
     }
 }
 
-function resetPOIMarkers(poiMarkers) {
+export function resetPOIMarkers(poiMarkers) {
     poiMarkers.forEach(marker => {
         marker.remove();
     });
     poiMarkers = [];
 }
 
-function getContourColor(elev, levels) {
+export function getContourColor(elev, levels) {
     const index = levels.indexOf(elev);
     const gradient = ['#4c88aa', '#00aa00', '#558000', '#806000', '#995522', '#4d2a00', '#000000' ];
     return index !== -1 ? gradient[index] : '#808080';  // fallback to gray if not found
-}
-
-function countMarkers(_layer) {
-    let count = 0;
-    _layer.eachLayer(layer => {
-        if (layer instanceof L.Marker) {
-            count++;
-        }
-    });
-    return count
 }

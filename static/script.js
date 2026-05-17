@@ -1,5 +1,10 @@
-import { initializeMapLayers } from './config.js';
+import { initializeExportMapLayer, initializeMapLayers } from './config-map-layers.js';
 import { createTileLayers } from './helpers.js';
+import { appSettings } from './helpers.js';
+import { resetPOIMarkers } from './helpers.js';
+import * as markerHelpers from './marker-helpers.js';
+//import { buldExportMap } from './config-map-layers.js';
+import { updateAppStateVariable, updateExportMap} from './export-helpers.js';
 
 console.log("Script is running!"); // This should appear in the console
 
@@ -13,12 +18,30 @@ if (typeof L !== "undefined") {
 // Main
 document.addEventListener("DOMContentLoaded", function () {
     // Create the two map instances
-    var map1 = L.map('map1',{ zoomControl: false }).setView([51.505, -0.09], 13);
-    var map2 = L.map('map2',{ zoomControl: false }).setView([51.505, -0.09], 13);
+    var map1 = L.map('map1',{ zoomControl: false }).setView([52.5200, 13.39], 12);
+    var map2 = L.map('map2',{ zoomControl: false }).setView([51.505, -0.09], 12);
+    var exportMap = L.map('exportMap',{ zoomControl: false }).setView([52.5200, 13.39], 12);
     console.log(map2.attributionControl)
+    
+    // Create a map state that *might* be useful for all the functions,
+    // is currently necessary for exporting the map
+    // before each export, appState is updated with values from map1
+    var appState = {
+        activeLayer: "population",
+        selectedCity: "Berlin",
+        opacity: 0.7,
+        basemap: "dark",
+        center: map1.getCenter(),
+        zoom: map1.getZoom(),
+        markers: [],
+        markerMode: false,
+        showPhotosActive: false
+    };
+    console.log(appState)
     
     // Call the config function
     const activeLayers = initializeMapLayers(map1, map2);
+    initializeExportMapLayer(exportMap)
     console.log("Layers configured successfully!", activeLayers);
     
     // Create marker layer for managing markers
@@ -418,108 +441,27 @@ document.addEventListener("DOMContentLoaded", function () {
     document.getElementById('deleteDrawingsBtn').addEventListener('click', deleteDrawings);
 
     // Functions for adding markers
-    let isGetMarkersActive = false;
+    //let isGetMarkersActive = false;  -  this is outdated, now handled through appState
+    appState.markerMode = false;
     let markerClickHandler = null;
     
-    function addMarkers() {
-        isGetMarkersActive = !isGetMarkersActive;
-        const addMarkersBtn = document.getElementById('addMarkersBtn');
+    document.getElementById('addMarkersBtn')
+    .addEventListener('click', () => {
+        markerHelpers.addMarkers({map: map1, markerLayer, markerClickHandler, appState,
+            appSettings
+        });
+    });
 
-        if (isGetMarkersActive) {
-            console.log("Marker mode enabled");
-            addMarkersBtn.innerText = "Finish adding markers";
-            addMarkersBtn.style.backgroundColor = appSettings.buttons.onColor;
-            
-            // Change cursor to crosshair
-            map1.getContainer().style.cursor = 'crosshair';
-            
-            // Add click handler for adding markers
-            markerClickHandler = function(e) {
-                currentMarkerCount = countMarkers(markerLayer)
-                console.log(currentMarkerCount)
-                const marker = L.marker(e.latlng).addTo(markerLayer);
-                // richer content (image + title + text)
-                //const html = `
-                   // <div class="marker-card">
-                    //    <h3 class="marker-title">Sample spot</h3>
-                    //    <img src="/static/sample.jpg" alt="Photo" class="marker-img" />
-                  //      <p class="marker-desc">Short description about this place.</p>
-                 //   </div>
-                 //   `;
-                // richer content (image + title + text)
-                const html = `
-                    <div class="marker-card">                        
-                        <img src="/static/sample${currentMarkerCount}.jpg" alt="Photo" class="marker-img" />
-                    </div>
-                    `;
-                
-                marker.bindPopup(html, {
-                    maxWidth: 260,
-                    className: "marker-popup",
-                    autoClose: false
-                });
-                console.log("Marker added at:", e.latlng);
-            };
-            
-            map1.on('click', markerClickHandler);
-        } else {
-            turnOffAddMarkers();
-        }
-    }
-    
-    document.getElementById('addMarkersBtn').addEventListener('click', addMarkers);
-
-    // Function to delete all markers
-    function deleteMarkers() {
-        markerLayer.clearLayers();
-        console.log('All markers deleted from the map');
-    }
-    
     // Add event listener for delete markers button
-    document.getElementById('deleteMarkersBtn').addEventListener('click', deleteMarkers);
-    
-    
-    function turnOffAddMarkers(){
-        console.log("Turning off markers");
-        if (markerClickHandler) {
-            map1.off('click', markerClickHandler);
-            markerClickHandler = null;
-        }
-        
-        const addMarkersBtn = document.getElementById('addMarkersBtn');
-        addMarkersBtn.innerText = "Add Markers";
-        addMarkersBtn.style.backgroundColor = appSettings.buttons.offColor;
-        
-        // Reset cursor to default
-        map1.getContainer().style.cursor = '';
-    }
+    document.getElementById('deleteMarkersBtn').addEventListener(
+        'click', () => {
+            markerHelpers.deleteMarkers({map: map1, markerLayer, appState});
+    });
 
-    let showPhotosActive = false;
-    function showOrHideMarkers(){
-        if (!showPhotosActive){
-            showPhotosActive = true;
-            showHidePhotosBtn.innerText = "Hide Photos";
-            showHidePhotosBtn.style.backgroundColor = appSettings.buttons.onColor;
-            
-            markerLayer.eachLayer(layer => {
-                if (layer instanceof L.Marker) {
-                    layer.openPopup();
-                }
-            });
-        }
-        else {
-            showPhotosActive = false;
-            showHidePhotosBtn.innerText = "Show Photos";
-            showHidePhotosBtn.style.backgroundColor = appSettings.buttons.offColor;
 
-            markerLayer.eachLayer(layer => {
-                if (layer instanceof L.Marker) {
-                    layer.closePopup();
-                }
-            });
-        }
-    }
-    document.getElementById('showHidePhotosBtn').addEventListener('click', showOrHideMarkers);
+    document.getElementById('showHidePhotosBtn').addEventListener('click', 
+        () => {markerHelpers.showOrHideMarkerPhotos({map1, markerLayer, appState, appSettings})
+    });
 
     // Functions for getting POIs
     let cursorCircle = null;
@@ -828,6 +770,12 @@ document.addEventListener("DOMContentLoaded", function () {
             contourLayer.remove();
             contourLayer = null;
         }
+    }
+
+    document.getElementById('export9x16Btn').addEventListener('click', export9x16);
+    function export9x16() {
+        updateAppStateVariable(appState, map1)
+        updateExportMap(exportMap, appState)
     }
 
 

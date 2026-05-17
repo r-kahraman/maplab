@@ -83,6 +83,15 @@ button:hover {
     position: relative;
 }
 
+#export-map-container {
+    position: absolute;
+    left: -9999px;
+    top: 0;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+}
+
 .map {
     flex: 1;
     margin: 8px;
@@ -210,8 +219,8 @@ button:hover {
 .marker-popup .leaflet-popup-content {
     margin: 3px 3px;
   }
-  .marker-card { width: 110px;
-    height: 110px;
+  .marker-card { width: 90px;
+    height: 90px;
      }
   .marker-title { margin: 0 0 6px; font-size: 14px; color: #002a13; }
   .marker-img { width: 100%; height: auto; border-radius: 6px; display: block; margin-bottom: 6px; }
