@@ -26,67 +26,77 @@
     <div id="sidebar">
         <div>
             <h1 style="text-align: center; margin: 5px 0;">MapLab</h2>
-        </div>
-
-        <div>
-            <h2 style="text-align: center; margin: 5px 0;">Functions</h2>
-        </div>
-        <div class="button-grid">
-            <button id="splitBtn" class="functionBtn">Split Map</button>
-            <button id="drawBtn" class="functionBtn">Draw!</button>
-            <button id="mirrorDrawBtn" class="functionBtn">Mirror Drawing</button>
-            <button id="deleteDrawingsBtn" class="functionBtn">Delete Drawings</button>
-            <button id="addMarkersBtn" class="functionBtn">Add Markers</button>
-            <button id="deleteMarkersBtn" class="functionBtn">Delete Markers</button>
-            <button id="showHidePhotosBtn" class="functionBtn">Show Photos</button>
-            <button id="export9x16Btn" class="functionBtn">Export 9x16</button>
-        </div>  
-        
-
-        <div>
-            <h2 style="text-align: center; margin: 5px 0;">Data</h2>
-        </div>
+            </div>
+            
+            <div>
+                <h2 style="text-align: center; margin: 5px 0;">Functions</h2>
+            </div>
+            <div class="button-grid">
+                <button id="splitBtn" class="functionBtn">Split Map</button>
+                <button id="drawBtn" class="functionBtn">Draw!</button>
+                <button id="mirrorDrawBtn" class="functionBtn">Mirror Drawing</button>
+                <button id="deleteDrawingsBtn" class="functionBtn">Delete Drawings</button>
+                <button id="addMarkersBtn" class="functionBtn">Add Markers</button>
+                <button id="deleteMarkersBtn" class="functionBtn">Delete Markers</button>
+                <button id="showHidePhotosBtn" class="functionBtn">Show Photos</button>
+                <!-- Grouped Export Button and Dropdown -->
+                <div class="export-control-group" style="grid-column: span 2; display: flex; flex-direction: column; gap: 5px; margin-top: 5px;">
+                    <label for="aspect-ratio" style="font-size: 12px; color: #ccc;">Export Aspect Ratio:</label>
+                    <select id="aspect-ratio" class="functionBtn" style="padding: 5px; width: 100%; cursor: pointer;">
+                        <option value="1:1">Square (1:1)</option>
+                        <option value="16:9">Landscape (16:9)</option>
+                        <option value="9:16">Portrait (9:16)</option>
+                        <option value="4:5">Instagram (4:5)</option>
+                    </select>
+                    <button id="exportBtn" class="functionBtn" style="width: 100%; margin-top: 2px;">Export Img</button>
+                </div>
+            </div>
+            
+            <div>
+                <h2 style="text-align: center; margin: 5px 0;">Data</h2>
+            </div>
             <button id="getPoisButton" class="dataBtn">Get POIs (WIP...)</button>
             <button id="getBuildingsButton" class="dataBtn">Get Buildings (WIP...)</button>
             <button id="highlightBuildingButton" class="dataBtn">Highlight Single Building</button>
             <button id="addTopoButton" class="dataBtn">Add Topo-lines</button>
             <button id="deleteTopoButton" class="dataBtn">Delete Topo-lines</button>
             
-        <div>
-            <h2 style="text-align: center; margin: 5px 0;">About</h2>
-        </div>
+            <div>
+                <h2 style="text-align: center; margin: 5px 0;">About</h2>
+            </div>
             <button id="unfinishedBtn2" class="aboutBtn">coming soon...</button>
-    </div>
-
-    <!-- Container for the two maps -->
-    <div id="map-container">
-        <div id="map1" class="map" style="height: calc(100vh - 50px);">
         </div>
-        <div id="map-divider"></div>
-        <div id="map2" class="map" style="height: calc(100vh - 50px);">
+        
+        <!-- Container for the two maps -->
+        <div id="map-container">
+            <div id="map1" class="map" style="height: calc(100vh - 50px);">
+            </div>
+            <div id="map-divider"></div>
+            <div id="map2" class="map" style="height: calc(100vh - 50px);">
+            </div>
         </div>
-    </div>
-    
-    <div id="export-map-container">
-        <div id="exportMap" class="map" style="height: calc(100vh - 50px);">
+        
+        <div id="export-map-container">
+            <div id="exportMap" class="map" style="height: calc(100vh - 50px);">
+            </div>
         </div>
-    </div>
-
-
-    <div id="spinner" class="spinner hidden"></div>
-    
-    <!-- Context Menu -->
-    <div id="contextMenu" class="context-menu hidden">
-        <div class="context-menu-item" data-layer="regular">Regular</div>
-        <div class="context-menu-item" data-layer="satellite">Satellite</div>
-        <div class="context-menu-item" data-layer="dark">Dark</div>
-        <div class="context-menu-item" data-layer="bw">Black & White</div>
-        <div class="context-menu-item" data-layer="hillshade">Hill-shade</div>
-        <div class="context-menu-item" data-layer="watercolor">Watercolor</div>
-        <div class="context-menu-item" data-layer="topography">Topography-lines</div>
-    </div>
-    
-    <!-- Include helper functions first, then main script -->
-    <script type="module" src="{{ url_for('static', filename='script.js') }}"></script>
-</body>
-</html>
+        
+        
+        <div id="spinner" class="spinner hidden"></div>
+        
+        <!-- Context Menu -->
+        <div id="contextMenu" class="context-menu hidden">
+            <div class="context-menu-item" data-layer="regular">Regular</div>
+            <div class="context-menu-item" data-layer="satellite">Satellite</div>
+            <div class="context-menu-item" data-layer="dark">Dark</div>
+            <div class="context-menu-item" data-layer="bw">Black & White</div>
+            <div class="context-menu-item" data-layer="hillshade">Hill-shade</div>
+            <div class="context-menu-item" data-layer="watercolor">Watercolor</div>
+            <div class="context-menu-item" data-layer="topography">Topography-lines</div>
+        </div>
+        
+        <!-- Include helper functions first, then main script -->
+        <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+        <script type="module" src="{{ url_for('static', filename='script.js') }}"></script>
+    </body>
+    </html>

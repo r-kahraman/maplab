@@ -4,7 +4,7 @@ import { appSettings } from './helpers.js';
 import { resetPOIMarkers } from './helpers.js';
 import * as markerHelpers from './marker-helpers.js';
 //import { buldExportMap } from './config-map-layers.js';
-import { updateAppStateVariable, updateExportMap} from './export-helpers.js';
+import { exportMapImage, syncExportMap} from './export-helpers.js';
 
 console.log("Script is running!"); // This should appear in the console
 
@@ -46,6 +46,7 @@ document.addEventListener("DOMContentLoaded", function () {
     
     // Create marker layer for managing markers
     let markerLayer = L.layerGroup();
+    let exportMarkerLayer = L.layerGroup().addTo(exportMap);
     
     // Add map divider functionality
     const divider = document.getElementById('map-divider');
@@ -772,11 +773,12 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
-    document.getElementById('export9x16Btn').addEventListener('click', export9x16);
-    function export9x16() {
-        updateAppStateVariable(appState, map1)
-        updateExportMap(exportMap, appState)
-    }
+    document.getElementById('exportBtn').addEventListener('click', async function() {
+        const aspectRatio = document.getElementById("aspect-ratio").value;
 
+        syncExportMap({mainMap: map1, exportMap, exportMarkerLayer, appState})
+
+        await exportMapImage(exportMap, aspectRatio, appState)
+    })
 
 });
